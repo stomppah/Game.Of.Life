@@ -2,8 +2,8 @@ C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\bin\Debug\
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\bin\Debug\GOL.exe
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\bin\Debug\GOL.pdb
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.csprojResolveAssemblyReference.cache
-C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.Form1.resources
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.Properties.Resources.resources
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.csproj.GenerateResource.Cache
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.exe
 C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.pdb
+C:\Users\Antz\Documents\SVN\Final--Year--Uni\ASDA\Assignment2\GOL\GOL\obj\Debug\GOL.WorldDisplayForm.resources
