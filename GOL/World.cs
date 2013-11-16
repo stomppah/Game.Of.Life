@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * Author: Anthony Woodward
+ * Email: a.woodward6237@student.leedsmet.ac.uk
+ * Date: 16/11/13
+ * Time: 16:57
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

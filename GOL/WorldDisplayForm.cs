@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * Author: Anthony Woodward
+ * Email: a.woodward6237@student.leedsmet.ac.uk
+ * Date: 16/11/13
+ * Time: 15:36
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -63,6 +69,65 @@ namespace GOL
                     }
                 }
             }
+            Refresh();
+        }
+
+        private void setupSliderGun()
+        {
+            read[11, 7] = true;
+            read[11, 8] = true;
+
+            read[12, 7] = true;
+            read[12, 8] = true;
+
+            read[21, 7] = true;
+            read[21, 8] = true;
+            read[21, 9] = true;
+
+            read[22, 6] = true;
+            read[22, 10] = true;
+
+            read[23, 5] = true;
+            read[23, 11] = true;
+
+            read[24, 5] = true;
+            read[24, 11] = true;
+
+            read[25, 8] = true;
+
+            read[26, 6] = true;
+            read[26, 10] = true;
+
+            read[27, 7] = true;
+            read[27, 8] = true;
+            read[27, 9] = true;
+
+            read[28, 8] = true;
+
+            read[31, 5] = true;
+            read[31, 6] = true;
+            read[31, 7] = true;
+
+            read[32, 5] = true;
+            read[32, 6] = true;
+            read[32, 7] = true;
+
+            read[33, 4] = true;
+            read[33, 8] = true;
+
+            read[35, 3] = true;
+            read[35, 4] = true;
+            read[35, 8] = true;
+            read[35, 9] = true;
+
+            read[45, 5] = true;
+            read[45, 6] = true;
+
+            read[46, 5] = true;
+            read[46, 6] = true;
+
+            evaluateGrid();
+
         }
 
         private void worldCanvas_Paint(object sender, PaintEventArgs e)
@@ -128,21 +193,30 @@ namespace GOL
                     }
                 }
             }
+            swapPointers();
+            
+            evaluateGrid();
+        }
+
+        //Cleanly swaps data sets.
+        private void swapPointers()
+        {
             bool[,] temp = new bool[rows, columns];
             read = temp;
             read = write;
             write = temp;
-            
-            evaluateGrid();
-            Refresh();
-
         }
 
         private void WorldDisplayForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Space)
+            switch (e.KeyChar)
             {
-                timer1.Enabled = !timer1.Enabled ? true : false;
+                case (char)Keys.Space:
+                    timer1.Enabled = !timer1.Enabled ? true : false;
+                    break;
+                case (char)Keys.Enter:
+                    setupSliderGun();
+                    break;
             }
         }
     }
