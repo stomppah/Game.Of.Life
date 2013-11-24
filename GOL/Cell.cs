@@ -14,7 +14,8 @@ namespace GOL
 {
     static class Cell
     {
-        private static int _size = 10;
+        private static int _size = 5;
+        //private static int 
 
         public static int Size { get { return _size; } }
     }

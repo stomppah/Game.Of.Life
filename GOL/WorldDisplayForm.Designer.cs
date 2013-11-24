@@ -42,9 +42,10 @@
             this.worldCanvas.Size = new System.Drawing.Size(960, 530);
             this.worldCanvas.TabIndex = 0;
             this.worldCanvas.TabStop = false;
-            this.worldCanvas.Click += new System.EventHandler(this.worldCanvas_Click);
             this.worldCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.worldCanvas_Paint);
+            this.worldCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.worldCanvas_MouseDown);
             this.worldCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.worldCanvas_MouseMove);
+            this.worldCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.worldCanvas_MouseUp);
             // 
             // timer1
             // 
