@@ -26,13 +26,33 @@ namespace GOL
 
         private static World gameWorld = new World();
 
-        private Thread WorldThread;// = new Thread(new ThreadStart(gameWorld.workerThread));
         private int threadCount = 4;
+        private Thread controlThread;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            WorldThread = new Thread(new ThreadStart(gameWorld.workerThread1));
-            WorldThread.Start();
+            controlThread = new Thread(new ThreadStart(threadController));
+            controlThread.Start();
+            while (true)
+            {
+                if (!controlThread.IsAlive)
+                {
+                    Refresh();
+                    controlThread.Start();
+                }
+            }
+        }
+
+        private void threadController()
+        {
+            for (int i = 0; i < threadCount; i++)
+            {
+                Thread WorldThread = new Thread(gameWorld.checkForNewLife);
+                WorldThread.Start(i);
+                WorldThread.Join();
+            }
+            gameWorld.swapPointers();
+            gameWorld.drawNewGrid();
         }
 
 

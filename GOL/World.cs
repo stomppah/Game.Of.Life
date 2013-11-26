@@ -48,6 +48,8 @@ namespace GOL
         public bool MousePainting { get { return _mousePainting; } set { _mousePainting = value; } }
         public bool EvaluatingGrid { get { return _evaluatingGrid; } set { _evaluatingGrid = value; } }
 
+        private int portionSize;
+
         public World()
         {
             _read = new bool[_rows, _columns];
@@ -55,13 +57,15 @@ namespace GOL
 
             _bmp = new Bitmap(_Width, _Height);
             _g1 = Graphics.FromImage(_bmp);
+
+            portionSize = 48;
         }
 
-        public void workerThread1()
-        {
-            while (true)
-                checkForNewLife();
-        }
+        //public void workerThread1(object portionNumber)
+        //{
+        //    while (true)
+        //        checkForNewLife();
+        //}
 
         public void workerThread2()
         {
@@ -69,7 +73,7 @@ namespace GOL
                 drawNewGrid();
         }
 
-        private void drawNewGrid()
+        public void drawNewGrid()
         {
             _g1.Clear(Color.White);
             for (int i = 0; i < _rows; i++)
@@ -89,12 +93,6 @@ namespace GOL
                     }
                 }
             }
-
-            //if (InvokeRequired)
-            //{
-            //    Invoke(new Action(() => Refresh()));
-            //}
-
         }
 
         public void setupSliderGun()
@@ -154,12 +152,12 @@ namespace GOL
             drawNewGrid();
         }
 
-        private void checkForNewLife()
+        public void checkForNewLife(object portionNumber)
         {
+            int portionNumberAsInt = (int)portionNumber;
+            int baseIndex = portionNumberAsInt * portionSize;
 
-            if (_evaluatingGrid)
-            {
-                for (int i = 0; i < _rows; i++)
+                for (int i = baseIndex; i < baseIndex + portionSize; i++)
                 {
                     for (int j = 0; j < _columns; j++)
                     {
@@ -198,15 +196,12 @@ namespace GOL
                             }
                         }
                     }
-                }
-                swapPointers();
+                
             }
-
-            //evaluateGrid();
         }
 
         //Cleanly swaps data sets.
-        private void swapPointers()
+        public void swapPointers()
         {
             bool[,] temp = new bool[_rows, _columns];
             _read = temp;
