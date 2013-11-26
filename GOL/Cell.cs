@@ -8,15 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
 namespace GOL
 {
-    static class Cell
+    class Cell
     {
         private static int _size = 5;
-        //private static int 
+        private static int _colour = 255;
 
         public static int Size { get { return _size; } }
+        public static int Colour { get { return _colour; } set { _colour = value; } }
     }
 }

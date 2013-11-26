@@ -16,7 +16,7 @@ namespace GOL
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new WorldDisplayForm());
+            Application.Run(new MainForm());
         }
     }
 }
