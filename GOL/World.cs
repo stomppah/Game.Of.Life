@@ -19,6 +19,9 @@ namespace GOL
         private const int _Width     = 960;
         private const int _Height    = 530;
 
+        private int _rows = _Width / Cell.Size;
+        private int _columns = _Height / Cell.Size;
+
         private static int _globalX, _globalY;
 
         private bool[,] _read;
@@ -27,37 +30,53 @@ namespace GOL
         private Graphics _g1;
         private Bitmap _bmp;
 
+        private bool _mousePainting = false;
+        private bool _evaluatingGrid = false;
+
         public int XPos { get { return _globalX; } set { _globalX = value; } }
         public int YPos { get { return _globalY; } set { _globalY = value; } }
+
+        public int Rows { get { return _rows; } }
+        public int Columns { get { return _columns; } }
 
         public bool[,] Read { get { return _read; } set { _read = value; } }
         public bool[,] Write { get { return _write; } set { _write = value; } }
 
         public Graphics G1 { get { return _g1; } set { _g1 = value; } }
-        public Bitmap bmp { get { return _bmp; } set { _bmp = value; } }
+        public Bitmap Bmp { get { return _bmp; } set { _bmp = value; } }
 
-        private int rows = _Width / Cell.Size;
-        private int columns = _Height / Cell.Size;
-
-        private bool mousePainting, evaluatingGrid = false;
+        public bool MousePainting { get { return _mousePainting; } set { _mousePainting = value; } }
+        public bool EvaluatingGrid { get { return _evaluatingGrid; } set { _evaluatingGrid = value; } }
 
         public World()
         {
-            _read = new bool[rows, columns];
-            _write = new bool[rows, columns];
+            _read = new bool[_rows, _columns];
+            _write = new bool[_rows, _columns];
 
             _bmp = new Bitmap(_Width, _Height);
             _g1 = Graphics.FromImage(_bmp);
         }
 
-        private void evaluateGrid()
+        public void workerThread1()
+        {
+            while (true)
+                checkForNewLife();
+        }
+
+        public void workerThread2()
+        {
+            while (true)
+                drawNewGrid();
+        }
+
+        private void drawNewGrid()
         {
             _g1.Clear(Color.White);
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < _rows; i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < _columns; j++)
                 {
-                    if ((i >= 0 && i < rows) && (j >= 0 && j < columns))
+                    if ((i >= 0 && i < _rows) && (j >= 0 && j < _columns))
                     {
                         if (_read[i, j])
                         {
@@ -78,7 +97,7 @@ namespace GOL
 
         }
 
-        private void setupSliderGun()
+        public void setupSliderGun()
         {
             _read[11, 7] = true;
             _read[11, 8] = true;
@@ -132,7 +151,67 @@ namespace GOL
             _read[46, 5] = true;
             _read[46, 6] = true;
 
-            evaluateGrid();
+            drawNewGrid();
+        }
+
+        private void checkForNewLife()
+        {
+
+            if (_evaluatingGrid)
+            {
+                for (int i = 0; i < _rows; i++)
+                {
+                    for (int j = 0; j < _columns; j++)
+                    {
+                        if (i > 0 && j > 0 && i < _rows - 1 && j < _columns - 1)
+                        {
+                            int liveNeighbours = 0;
+
+                            // Check row above the cell.
+                            if (_read[i, j - 1]) liveNeighbours++;
+                            if (_read[i - 1, j - 1]) liveNeighbours++;
+                            if (_read[i + 1, j - 1]) liveNeighbours++;
+
+                            // Check row containing the cell.
+                            if (_read[i - 1, j]) liveNeighbours++;
+                            if (_read[i + 1, j]) liveNeighbours++;
+
+                            // Check row below the cell.
+                            if (_read[i - 1, j + 1]) liveNeighbours++;
+                            if (_read[i + 1, j + 1]) liveNeighbours++;
+                            if (_read[i, j + 1]) liveNeighbours++;
+
+                            // Implement game of life logic.
+                            if (_read[i, j])
+                            {
+                                if (liveNeighbours == 2 || liveNeighbours == 3)
+                                    _write[i, j] = true; // Survival of a cell.
+                                else
+                                    _write[i, j] = false; // Death from under/overcrowding.
+                            }
+                            else
+                            {
+                                if (liveNeighbours == 3)
+                                {
+                                    _write[i, j] = true; // Birth of a live cell.
+                                }
+                            }
+                        }
+                    }
+                }
+                swapPointers();
+            }
+
+            //evaluateGrid();
+        }
+
+        //Cleanly swaps data sets.
+        private void swapPointers()
+        {
+            bool[,] temp = new bool[_rows, _columns];
+            _read = temp;
+            _read = _write;
+            _write = temp;
         }
 
     }

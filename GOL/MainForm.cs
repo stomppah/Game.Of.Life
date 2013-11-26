@@ -18,109 +18,47 @@ namespace GOL
 {
     public partial class MainForm : Form
     {
+
         public MainForm()
         {
             InitializeComponent();
-            init();
         }
 
-        private void MainForm_Load()
-        {
+        private static World gameWorld = new World();
 
+        private Thread WorldThread;// = new Thread(new ThreadStart(gameWorld.workerThread));
+        private int threadCount = 4;
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            WorldThread = new Thread(new ThreadStart(gameWorld.workerThread1));
+            WorldThread.Start();
         }
 
-        private void init()
-        {
-            //thread1 = new Thread(new ThreadStart(checkForNewLife));
-            //thread1.Start();
-            //thread1.Join();
-
-            //evaluateGrid();
-        }       
 
         private void worldCanvas_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.DrawImage(bmp, 0, 0);
+            g.DrawImage(gameWorld.Bmp, 0, 0);
         }
 
         private void worldCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            World.XPos = e.X;
-            World.YPos = e.Y;
+            gameWorld.XPos = e.X;
+            gameWorld.YPos = e.Y;
             this.Text = "MouseX: " + e.X + " - MouseY: " + e.Y;
 
-            if (mousePainting)
+            if (gameWorld.MousePainting)
             {
-                int i = (int)World.XPos / Cell.Size;
-                int j = (int)World.YPos / Cell.Size;
-                if ((i >= 0 && i < rows) && (j >= 0 && j < columns))
+                int i = (int)gameWorld.XPos / Cell.Size;
+                int j = (int)gameWorld.YPos / Cell.Size;
+                if ((i >= 0 && i < gameWorld.Rows) && (j >= 0 && j < gameWorld.Columns))
                 {
-                    read[i, j] = true;
-                    g1.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
+                    gameWorld.Read[i, j] = true;
+                    gameWorld.G1.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
                     Refresh();
                 }
             }
-        }
-
-        private void checkForNewLife()
-        {
-
-            if (evaluatingGrid)
-            {
-                for (int i = 0; i < rows; i++)
-                {
-                    for (int j = 0; j < columns; j++)
-                    {
-                        if (i > 0 && j > 0 && i < rows - 1 && j < columns - 1)
-                        {
-                            int liveNeighbours = 0;
-
-                            // Check row above the cell.
-                            if (read[i, j - 1]) liveNeighbours++;
-                            if (read[i - 1, j - 1]) liveNeighbours++;
-                            if (read[i + 1, j - 1]) liveNeighbours++;
-
-                            // Check row containing the cell.
-                            if (read[i - 1, j]) liveNeighbours++;
-                            if (read[i + 1, j]) liveNeighbours++;
-
-                            // Check row below the cell.
-                            if (read[i - 1, j + 1]) liveNeighbours++;
-                            if (read[i + 1, j + 1]) liveNeighbours++;
-                            if (read[i, j + 1]) liveNeighbours++;
-
-                            // Implement game of life logic.
-                            if (read[i, j])
-                            {
-                                if (liveNeighbours == 2 || liveNeighbours == 3)
-                                    write[i, j] = true; // Survival of a cell.
-                                else
-                                    write[i, j] = false; // Death from under/overcrowding.
-                            }
-                            else
-                            {
-                                if (liveNeighbours == 3)
-                                {
-                                    write[i, j] = true; // Birth of a live cell.
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            swapPointers();
-
-            evaluateGrid();
-        }
-
-        //Cleanly swaps data sets.
-        private void swapPointers()
-        {
-            bool[,] temp = new bool[rows, columns];
-            read = temp;
-            read = write;
-            write = temp;
         }
 
         private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -128,22 +66,22 @@ namespace GOL
             switch (e.KeyChar)
             {
                 case (char)Keys.Space:
-                    evaluatingGrid = !evaluatingGrid ? true : false;
+                    gameWorld.EvaluatingGrid = !gameWorld.EvaluatingGrid ? true : false;
                     break;
                 case (char)Keys.Enter:
-                    setupSliderGun();
+                    gameWorld.setupSliderGun();
                     break;
             }
         }
 
         private void worldCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            mousePainting = true;
+            gameWorld.MousePainting = true;
         }
 
         private void worldCanvas_MouseUp(object sender, MouseEventArgs e)
         {
-            mousePainting = false;
+            gameWorld.MousePainting = false;
         }
 
     }
