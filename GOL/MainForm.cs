@@ -26,8 +26,10 @@ namespace GOL
 
         private static World gameWorld = new World();
 
-        private int threadCount = 4;
-        private Thread controlThread;
+        private static int threadCount = 4;
+        private static Thread controlThread;
+        private static Thread[] workerThread = new Thread[threadCount];
+        public static Semaphore sem = new Semaphore(4, 4);
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -47,12 +49,13 @@ namespace GOL
         {
             for (int i = 0; i < threadCount; i++)
             {
-                Thread WorldThread = new Thread(gameWorld.checkForNewLife);
-                WorldThread.Start(i);
-                WorldThread.Join();
+                workerThread[i] = new Thread(gameWorld.checkForNewLife);
+                workerThread[i].Start(i);
+                workerThread[i].Join();
             }
             gameWorld.swapPointers();
             gameWorld.drawNewGrid();
+            //controlThread.Suspend();
         }
 
 

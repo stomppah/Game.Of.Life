@@ -24,8 +24,8 @@ namespace GOL
 
         private static int _globalX, _globalY;
 
-        private bool[,] _read;
-        private bool[,] _write;
+        private static bool[,] _read;
+        private static bool[,] _write;
 
         private Graphics _g1;
         private Bitmap _bmp;
@@ -61,16 +61,54 @@ namespace GOL
             portionSize = 48;
         }
 
-        //public void workerThread1(object portionNumber)
-        //{
-        //    while (true)
-        //        checkForNewLife();
-        //}
-
-        public void workerThread2()
+        public void checkForNewLife(object portionNumber)
         {
-            while (true)
-                drawNewGrid();
+            MainForm.sem.WaitOne();
+            int portionNumberAsInt = (int)portionNumber;
+            int baseIndex = portionNumberAsInt * portionSize;
+
+            for (int i = baseIndex; i < baseIndex + portionSize; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    if (i > 0 && j > 0 && i < _rows - 1 && j < _columns - 1)
+                    {
+                        int liveNeighbours = 0;
+
+                        // Check row above the cell.
+                        if (_read[i, j - 1]) liveNeighbours++;
+                        if (_read[i - 1, j - 1]) liveNeighbours++;
+                        if (_read[i + 1, j - 1]) liveNeighbours++;
+
+                        // Check row containing the cell.
+                        if (_read[i - 1, j]) liveNeighbours++;
+                        if (_read[i + 1, j]) liveNeighbours++;
+
+                        // Check row below the cell.
+                        if (_read[i - 1, j + 1]) liveNeighbours++;
+                        if (_read[i + 1, j + 1]) liveNeighbours++;
+                        if (_read[i, j + 1]) liveNeighbours++;
+
+                        // Implement game of life logic.
+                        if (_read[i, j])
+                        {
+                            if (liveNeighbours == 2 || liveNeighbours == 3)
+                                _write[i, j] = true; // Survival of a cell.
+                            else
+                                _write[i, j] = false; // Death from under/overcrowding.
+                        }
+                        else
+                        {
+                            if (liveNeighbours == 3)
+                            {
+                                _write[i, j] = true; // Birth of a live cell.
+                            }
+                        }
+                    }
+                } //end for
+            } //end for
+            
+            MainForm.sem.Release();
         }
 
         public void drawNewGrid()
@@ -150,54 +188,6 @@ namespace GOL
             _read[46, 6] = true;
 
             drawNewGrid();
-        }
-
-        public void checkForNewLife(object portionNumber)
-        {
-            int portionNumberAsInt = (int)portionNumber;
-            int baseIndex = portionNumberAsInt * portionSize;
-
-                for (int i = baseIndex; i < baseIndex + portionSize; i++)
-                {
-                    for (int j = 0; j < _columns; j++)
-                    {
-                        if (i > 0 && j > 0 && i < _rows - 1 && j < _columns - 1)
-                        {
-                            int liveNeighbours = 0;
-
-                            // Check row above the cell.
-                            if (_read[i, j - 1]) liveNeighbours++;
-                            if (_read[i - 1, j - 1]) liveNeighbours++;
-                            if (_read[i + 1, j - 1]) liveNeighbours++;
-
-                            // Check row containing the cell.
-                            if (_read[i - 1, j]) liveNeighbours++;
-                            if (_read[i + 1, j]) liveNeighbours++;
-
-                            // Check row below the cell.
-                            if (_read[i - 1, j + 1]) liveNeighbours++;
-                            if (_read[i + 1, j + 1]) liveNeighbours++;
-                            if (_read[i, j + 1]) liveNeighbours++;
-
-                            // Implement game of life logic.
-                            if (_read[i, j])
-                            {
-                                if (liveNeighbours == 2 || liveNeighbours == 3)
-                                    _write[i, j] = true; // Survival of a cell.
-                                else
-                                    _write[i, j] = false; // Death from under/overcrowding.
-                            }
-                            else
-                            {
-                                if (liveNeighbours == 3)
-                                {
-                                    _write[i, j] = true; // Birth of a live cell.
-                                }
-                            }
-                        }
-                    }
-                
-            }
         }
 
         //Cleanly swaps data sets.
