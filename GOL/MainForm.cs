@@ -24,38 +24,43 @@ namespace GOL
             InitializeComponent();
         }
 
-        private static World gameWorld = new World();
+        private World gameWorld = new World();
 
         private static int threadCount = 4;
-        private static Thread controlThread;
-        private static Thread[] workerThread = new Thread[threadCount];
-        public static Semaphore sem = new Semaphore(4, 4);
+        private Thread controlThread;
+        private Thread[] workerThread = new Thread[threadCount];
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             controlThread = new Thread(new ThreadStart(threadController));
+            controlThread.IsBackground = true;
             controlThread.Start();
-            while (true)
-            {
+
+            
                 if (!controlThread.IsAlive)
                 {
                     Refresh();
+                    
+                    controlThread = new Thread(new ThreadStart(threadController));
+                    controlThread.IsBackground = true;
                     controlThread.Start();
                 }
-            }
+            
         }
 
         private void threadController()
         {
-            for (int i = 0; i < threadCount; i++)
+            while (true)
             {
-                workerThread[i] = new Thread(gameWorld.checkForNewLife);
-                workerThread[i].Start(i);
-                workerThread[i].Join();
+                for (int i = 0; i < threadCount; i++)
+                {
+                    workerThread[i] = new Thread(gameWorld.checkForNewLife);
+                    workerThread[i].Start(i);
+                    workerThread[i].Join();
+                }
+                gameWorld.swapPointers();
+                gameWorld.drawNewGrid();
             }
-            gameWorld.swapPointers();
-            gameWorld.drawNewGrid();
-            //controlThread.Suspend();
         }
 
 

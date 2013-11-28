@@ -63,7 +63,7 @@ namespace GOL
 
         public void checkForNewLife(object portionNumber)
         {
-            MainForm.sem.WaitOne();
+
             int portionNumberAsInt = (int)portionNumber;
             int baseIndex = portionNumberAsInt * portionSize;
 
@@ -107,8 +107,7 @@ namespace GOL
                     }
                 } //end for
             } //end for
-            
-            MainForm.sem.Release();
+
         }
 
         public void drawNewGrid()
