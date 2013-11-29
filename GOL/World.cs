@@ -49,7 +49,7 @@ namespace GOL
         public bool isRunning { get { return _running; } set { _running = value; } }
 
         private int portionSize;
-        private static Queue<int> queue = new Queue<int>();
+        private static int queue = 4;
 
         public World()
         {
@@ -61,68 +61,73 @@ namespace GOL
 
             portionSize = 48;
 
-            queue.Enqueue(4);
         }
 
         public void checkForNewLife(object portionNumber)
         {
             while (true)
             {
-                if (isRunning && queue.Count != 0)
+                while (isRunning)
                 {
-                    queue.Dequeue();
-                    int portionNumberAsInt = (int)portionNumber;
-                    int baseIndex = portionNumberAsInt * portionSize;
-
-                    for (int i = baseIndex; i < baseIndex + portionSize; i++)
+                    if (queue > 0)
                     {
-                        for (int j = 0; j < _columns; j++)
+                        int portionNumberAsInt = (int)portionNumber;
+                        int baseIndex = portionNumberAsInt * portionSize;
+
+                        for (int i = baseIndex; i < baseIndex + portionSize; i++)
                         {
-                            if (i > 0 && j > 0 && i < _rows - 1 && j < _columns - 1)
+                            for (int j = 0; j < _columns; j++)
                             {
-                                int liveNeighbours = 0;
-
-                                // Check row above the cell.
-                                if (_read[i, j - 1]) liveNeighbours++;
-                                if (_read[i - 1, j - 1]) liveNeighbours++;
-                                if (_read[i + 1, j - 1]) liveNeighbours++;
-
-                                // Check row containing the cell.
-                                if (_read[i - 1, j]) liveNeighbours++;
-                                if (_read[i + 1, j]) liveNeighbours++;
-
-                                // Check row below the cell.
-                                if (_read[i - 1, j + 1]) liveNeighbours++;
-                                if (_read[i + 1, j + 1]) liveNeighbours++;
-                                if (_read[i, j + 1]) liveNeighbours++;
-
-                                // Implement game of life logic.
-                                if (_read[i, j])
+                                if (i > 0 && j > 0 && i < _rows - 1 && j < _columns - 1)
                                 {
-                                    if (liveNeighbours == 2 || liveNeighbours == 3)
+                                    int liveNeighbours = 0;
+
+                                    // Check row above the cell.
+                                    if (_read[i, j - 1]) liveNeighbours++;
+                                    if (_read[i - 1, j - 1]) liveNeighbours++;
+                                    if (_read[i + 1, j - 1]) liveNeighbours++;
+
+                                    // Check row containing the cell.
+                                    if (_read[i - 1, j]) liveNeighbours++;
+                                    if (_read[i + 1, j]) liveNeighbours++;
+
+                                    // Check row below the cell.
+                                    if (_read[i - 1, j + 1]) liveNeighbours++;
+                                    if (_read[i + 1, j + 1]) liveNeighbours++;
+                                    if (_read[i, j + 1]) liveNeighbours++;
+
+                                    // Implement game of life logic.
+                                    if (_read[i, j])
                                     {
-                                        _write[i, j] = true; // Survival of a cell.
-                                        drawCellAt(i, j, true);
+                                        if (liveNeighbours == 2 || liveNeighbours == 3)
+                                        {
+                                            _write[i, j] = true; // Survival of a cell.
+                                            drawCellAt(i, j, true);
+                                        }
+                                        else
+                                        {
+                                            _write[i, j] = false; // Death from under/overcrowding.
+                                            drawCellAt(i, j, false);
+                                        }
                                     }
                                     else
                                     {
-                                        _write[i, j] = false; // Death from under/overcrowding.
-                                        drawCellAt(i, j, false);
+                                        if (liveNeighbours == 3)
+                                        {
+                                            _write[i, j] = true; // Birth of a live cell.
+                                            drawCellAt(i, j, true);
+                                        }
                                     }
                                 }
-                                else
-                                {
-                                    if (liveNeighbours == 3)
-                                    {
-                                        _write[i, j] = true; // Birth of a live cell.
-                                        drawCellAt(i, j, true);
-                                    }
-                                }
-                            }
+                            } //end for
                         } //end for
-                    } //end for
-                    
-
+                        queue--;
+                    }
+                    else
+                    {
+                        MethodInvoker mi = delegate() { Refresh(); };
+                        Invoke(mi);
+                    }
                 }
             }
         }
@@ -154,23 +159,23 @@ namespace GOL
         public void drawNewGrid()
         {
             _g1.Clear(Color.White);
-            //for (int i = 0; i < _rows; i++)
-            //{
-            //    for (int j = 0; j < _columns; j++)
-            //    {
-            //        if ((i >= 0 && i < _rows) && (j >= 0 && j < _columns))
-            //        {
-            //            if (_read[i, j])
-            //            {
-            //                drawCellAt(i, j, true);
-            //            }
-            //            else
-            //            {
-            //                drawCellAt(i, j, false);
-            //            }
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    if ((i >= 0 && i < _rows) && (j >= 0 && j < _columns))
+                    {
+                        if (_read[i, j])
+                        {
+                            drawCellAt(i, j, true);
+                        }
+                        else
+                        {
+                            drawCellAt(i, j, false);
+                        }
+                    }
+                }
+            }
         }
 
         public void setupSliderGun()
