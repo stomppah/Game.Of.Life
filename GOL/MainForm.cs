@@ -38,7 +38,6 @@ namespace GOL
             for (int i = 0; i < threadCount; i++)
             {
                 newLifeChecker[i] = new Thread(gameWorld.checkForNewLife);
-                newLifeChecker[i].IsBackground = true;
                 newLifeChecker[i].Start(i);
             }
             //while (true)
