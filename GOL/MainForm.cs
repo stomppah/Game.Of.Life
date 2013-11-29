@@ -30,6 +30,8 @@ namespace GOL
 
         private Thread[] newLifeChecker = new Thread[threadCount];
 
+        private Graphics g;
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             gameWorld.setupSliderGun();
@@ -39,28 +41,13 @@ namespace GOL
                 newLifeChecker[i].IsBackground = true;
                 newLifeChecker[i].Start(i);
             }
-        }
+            //while (true)
+            //{
+            //    if (!this.IsHandleCreated && !this.IsDisposed) return;
 
-        private void MainLoop()
-        {
-            while (true)
-            {
-                Thread.Sleep(10);
-
-                if (!this.IsHandleCreated && !this.IsDisposed) return;
-
-                MethodInvoker mi = delegate() { this.Refresh(); };
-                this.Invoke(mi);
-
-                if (gameWorld.isRunning)
-                {
-                    for (int i = 0; i < threadCount; i++)
-                    {
-                        newLifeChecker[i].Start(i);
-                        newLifeChecker[i].Join();
-                    }
-                }
-            }
+            //    MethodInvoker mi = delegate() { this.Refresh(); };
+            //    this.Invoke(mi);
+            //}
         }
 
         private void worldCanvas_Paint(object sender, PaintEventArgs e)
@@ -81,7 +68,7 @@ namespace GOL
                 int j = (int)gameWorld.YPos / Cell.Size;
                 if ((i >= 0 && i < gameWorld.Rows) && (j >= 0 && j < gameWorld.Columns))
                 {
-                    Graphics g = Graphics.FromImage(new Bitmap(worldCanvas.Image));
+                    g = Graphics.FromImage(gameWorld.Bmp);
                     gameWorld.Read[i, j] = true;
                     g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
                     Refresh();
