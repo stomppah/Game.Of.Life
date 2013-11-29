@@ -29,7 +29,6 @@ namespace GOL
         private World gameWorld = new World();
 
         private Thread[] newLifeChecker = new Thread[threadCount];
-        private Thread doThisAllTheTime;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -38,16 +37,16 @@ namespace GOL
             {
                 newLifeChecker[i] = new Thread(gameWorld.checkForNewLife);
                 newLifeChecker[i].IsBackground = true;
+                newLifeChecker[i].Start(i);
             }
-
-            doThisAllTheTime = new Thread(MainLoop);
-            doThisAllTheTime.Start();
         }
 
         private void MainLoop()
         {
             while (true)
             {
+                Thread.Sleep(10);
+
                 if (!this.IsHandleCreated && !this.IsDisposed) return;
 
                 MethodInvoker mi = delegate() { this.Refresh(); };
