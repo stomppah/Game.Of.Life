@@ -26,43 +26,27 @@ namespace GOL
 
         private World gameWorld = new World();
 
-        private static int threadCount = 4;
-        private Thread controlThread;
-        private Thread[] workerThread = new Thread[threadCount];
+        private const int threadCount = 4;
+        private Thread[] newLifeChecker = new Thread[threadCount];
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            controlThread = new Thread(new ThreadStart(threadController));
-            controlThread.IsBackground = true;
-            controlThread.Start();
-
-            
-                if (!controlThread.IsAlive)
-                {
-                    Refresh();
-                    
-                    controlThread = new Thread(new ThreadStart(threadController));
-                    controlThread.IsBackground = true;
-                    controlThread.Start();
-                }
-            
-        }
-
-        private void threadController()
-        {
+            for (int i = 0; i < threadCount; i++)
+            {
+                newLifeChecker[i] = new Thread(gameWorld.checkForNewLife);
+                newLifeChecker[i].IsBackground = true;
+            }
             while (true)
             {
-                for (int i = 0; i < threadCount; i++)
+                if (gameWorld.EvaluatingGrid)
                 {
-                    workerThread[i] = new Thread(gameWorld.checkForNewLife);
-                    workerThread[i].Start(i);
-                    workerThread[i].Join();
+                    for (int i = 0; i < threadCount; i++)
+                    {
+                        newLifeChecker[i].Start(i);
+                    }
                 }
-                gameWorld.swapPointers();
-                gameWorld.drawNewGrid();
             }
         }
-
 
         private void worldCanvas_Paint(object sender, PaintEventArgs e)
         {
@@ -82,8 +66,9 @@ namespace GOL
                 int j = (int)gameWorld.YPos / Cell.Size;
                 if ((i >= 0 && i < gameWorld.Rows) && (j >= 0 && j < gameWorld.Columns))
                 {
+                    Graphics g = Graphics.FromImage(new Bitmap(worldCanvas.Image));
                     gameWorld.Read[i, j] = true;
-                    gameWorld.G1.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
+                    g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
                     Refresh();
                 }
             }
