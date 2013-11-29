@@ -113,7 +113,7 @@ namespace GOL
         /**
          * Draws cell at the spcified cooridinates.
          * */
-        public void drawCellAt(int xpos, int ypos, bool alive)
+        private void drawCellAt(int xpos, int ypos, bool alive)
         {
             Color cellColor = alive ? Color.Green : Color.Beige;
             SolidBrush brush = new SolidBrush(cellColor);
