@@ -146,7 +146,7 @@ namespace GOL
                         }
                         else
                         {
-                            drawCellAt(i, j, true);
+                            drawCellAt(i, j, false);
                         }
                     }
                 }
