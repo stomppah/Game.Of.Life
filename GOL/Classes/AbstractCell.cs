@@ -16,29 +16,28 @@ namespace GOL.Classes
     abstract class AbstractCell
     {
         private static const int maxAge = 255;
-        private byte age;
+        private int age;
 
         public AbstractCell()
         {
-            age = 255;
         }
-
-        public abstract int Age
+        public int Age
         {
-            
+
             get
             {
-                return age < maxAge 
-                    ? age++ 
+                return age < maxAge
+                    ? age++
                     : maxAge; // stays same colour
             }
 
             set { age = maxAge; }
         }
 
-        public abstract bool IsAlive
+        public bool IsAlive
         {
             get { return age > 0 ? true : false; }
+            set { if (age != 0) age++; }
         }
     }
 }
