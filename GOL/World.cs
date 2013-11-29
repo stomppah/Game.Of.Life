@@ -110,6 +110,27 @@ namespace GOL
 
         }
 
+        /**
+         * Draws cell at the spcified cooridinates.
+         * */
+        public void drawCellAt(int xpos, int ypos, bool alive)
+        {
+            Color cellColor = alive ? Color.Green : Color.Beige;
+            SolidBrush brush = new SolidBrush(cellColor);
+            Pen pen = new Pen(cellColor);
+
+            Rectangle rect = new Rectangle(xpos * Cell.Size, ypos * Cell.Size, Cell.Size, Cell.Size);
+
+            if (alive)
+            {
+                _g1.FillRectangle(brush, rect);
+            }
+            else
+            {
+                _g1.DrawRectangle(pen, rect);
+            }
+        }
+
         public void drawNewGrid()
         {
             _g1.Clear(Color.White);
@@ -121,11 +142,11 @@ namespace GOL
                     {
                         if (_read[i, j])
                         {
-                            _g1.FillRectangle(new SolidBrush(Color.Green), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
+                            drawCellAt(i, j, true);
                         }
                         else
                         {
-                            _g1.DrawRectangle(new Pen(Color.Beige), new Rectangle(i * Cell.Size, j * Cell.Size, Cell.Size, Cell.Size));
+                            drawCellAt(i, j, true);
                         }
                     }
                 }
