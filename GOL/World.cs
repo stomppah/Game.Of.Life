@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace GOL
 {
-    class World
+    class World : IDisposable
     {
         private const int _Width     = 960;
         private const int _Height    = 530;
@@ -198,5 +198,9 @@ namespace GOL
             _write = temp;
         }
 
+        void IDisposable.Dispose()
+        {
+            _bmp.Dispose();
+        }
     }
 }
