@@ -24,25 +24,41 @@ namespace GOL
             InitializeComponent();
         }
 
+        private const int threadCount = 4;
+
         private World gameWorld = new World();
 
-        private const int threadCount = 4;
         private Thread[] newLifeChecker = new Thread[threadCount];
+        private Thread doThisAllTheTime;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            gameWorld.setupSliderGun();
             for (int i = 0; i < threadCount; i++)
             {
                 newLifeChecker[i] = new Thread(gameWorld.checkForNewLife);
                 newLifeChecker[i].IsBackground = true;
             }
+
+            doThisAllTheTime = new Thread(MainLoop);
+            doThisAllTheTime.Start();
+        }
+
+        private void MainLoop()
+        {
             while (true)
             {
-                if (gameWorld.EvaluatingGrid)
+                if (!this.IsHandleCreated && !this.IsDisposed) return;
+
+                MethodInvoker mi = delegate() { this.Refresh(); };
+                this.Invoke(mi);
+
+                if (gameWorld.isRunning)
                 {
                     for (int i = 0; i < threadCount; i++)
                     {
                         newLifeChecker[i].Start(i);
+                        newLifeChecker[i].Join();
                     }
                 }
             }
@@ -79,7 +95,7 @@ namespace GOL
             switch (e.KeyChar)
             {
                 case (char)Keys.Space:
-                    gameWorld.EvaluatingGrid = !gameWorld.EvaluatingGrid ? true : false;
+                    gameWorld.isRunning = !gameWorld.isRunning ? true : false;
                     break;
                 case (char)Keys.Enter:
                     gameWorld.setupSliderGun();

@@ -31,7 +31,7 @@ namespace GOL
         private Bitmap _bmp;
 
         private bool _mousePainting = false;
-        private bool _evaluatingGrid = false;
+        private bool _running = false;
 
         public int XPos { get { return _globalX; } set { _globalX = value; } }
         public int YPos { get { return _globalY; } set { _globalY = value; } }
@@ -46,7 +46,7 @@ namespace GOL
         public Bitmap Bmp { get { return _bmp; } set { _bmp = value; } }
 
         public bool MousePainting { get { return _mousePainting; } set { _mousePainting = value; } }
-        public bool EvaluatingGrid { get { return _evaluatingGrid; } set { _evaluatingGrid = value; } }
+        public bool isRunning { get { return _running; } set { _running = value; } }
 
         private int portionSize;
 
