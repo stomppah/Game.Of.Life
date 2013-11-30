@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace GOL.Classes.Base
 {
+    [Serializable()]
     abstract class CellBase
     {
         private const int m_MaxAge = 255;

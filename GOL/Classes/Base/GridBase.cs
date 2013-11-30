@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace GOL.Classes.Base
 {
+    [Serializable()]
     abstract class GridBase
     {
         private static CellBase[,] m_Grid;
