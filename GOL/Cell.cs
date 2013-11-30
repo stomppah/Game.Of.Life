@@ -1,21 +1,19 @@
 ﻿/**
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
- * Date: 16/11/13
+ * Date: 29/11/13
  * Time: 18:03
  */
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GOL.Classes;
+
 namespace GOL
 {
-    class Cell
+    class Cell : CellBase
     {
-        private static int _size = 5;
-        private static int _colour = 255;
-
-        public static int Size { get { return _size; } }
-        public static int Colour { get { return _colour; } set { _colour = value; } }
+        
     }
 }
