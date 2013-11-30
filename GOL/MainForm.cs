@@ -15,36 +15,28 @@ namespace GOL
     public partial class MainForm : Form
     {
         private static Grid g_Read;
-        private static Grid g_Write;
-
-        private Thread[] t_Producer;
 
         public MainForm()
         {
             InitializeComponent();
 
             g_Read = new Grid();
-            g_Write = new Grid();
-           
-        }
-
-        private void results_Producer()
-        {
-            while (true)
-            {
-                //you need to use Invoke because the new thread can't access the UI elements directly
-                //MethodInvoker mi = delegate() { this.Text = DateTime.Now.ToString(); };
-                //this.Invoke(mi);
-            }
         }
 
         private void Window_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                t_Producer[i] = new Thread(new ThreadStart(results_Producer));
-                t_Producer[i].Start(i);
-            }
+            Refresh();
+        }
+
+        private void canvas_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.DrawImage(g_Read.Buffer, 0, 0);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            g_Read.nextGrid();
         }
     }
 }

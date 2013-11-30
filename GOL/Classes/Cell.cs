@@ -16,22 +16,20 @@ namespace GOL.Classes
     {
         private const int m_MaxAge = 255;
         private int m_Age = 0;
-
-        public Cell()
-        {
-        }
+        private bool m_Alive = false;
 
         public bool IsAlive
         {
             get 
-            { return m_Age > 0 ? true : false; 
+            { 
+                return m_Alive; 
             }
             set
             {
-                if (value) m_Age++; else m_Age = 0;
+                m_Alive = value; ;
             }
         }
 
-        public int Age { get { return m_Age; } }
+        public int Age { get { return m_Age; } set { value = m_Age; } }
     }
 }

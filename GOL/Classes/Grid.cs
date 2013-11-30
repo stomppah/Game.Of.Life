@@ -16,7 +16,7 @@ namespace GOL.Classes
     [Serializable()]
     class Grid
     {
-        private Cell[,] m_ReadCells, m_WriteCells;
+        private static Cell[,] m_ReadCells, m_WriteCells, m_TempCells;
 
         private const int m_Width = 960;
         private const int m_Height = 530;
@@ -27,15 +27,33 @@ namespace GOL.Classes
         private Graphics m_Graphics;
         private Bitmap m_Bitmap;
 
+        public Bitmap Buffer { get { return m_Bitmap; } }
+
         public Grid()
         {
             m_ReadCells = new Cell[m_Rows, m_Cols];
             m_WriteCells = new Cell[m_Rows, m_Cols];
+            m_TempCells = new Cell[m_Rows, m_Cols];
+
+            InitializeGrids();
 
             setupSliderGun();
 
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
+        }
+
+        private void InitializeGrids()
+        {
+            for (int i = 0; i < m_Rows; i++)
+            {
+                for (int j = 0; j < m_Cols; j++)
+                {
+                    m_ReadCells[i, j] = new Cell();
+                    m_WriteCells [i, j] = new Cell();
+                    m_TempCells [i, j] = new Cell();
+                }
+            }
         }
 
         private void setCellAt(int xCoord, int yCoord, bool alive)
@@ -80,6 +98,7 @@ namespace GOL.Classes
                     }
                 } //end for
             } //end for
+            swapPointers();
         }
 
         private int m_Neighbours(int i, int j)
@@ -103,12 +122,12 @@ namespace GOL.Classes
         }
 
         //Cleanly swaps data sets.
-        public void swapPointers()
+        private void swapPointers()
         {
-            Cell[,] m_TempCells = new Cell[m_Rows, m_Cols];
             m_ReadCells = m_TempCells;
             m_ReadCells = m_WriteCells;
             m_WriteCells = m_TempCells;
+            drawNewGrid();
         }
 
         private void setupSliderGun()
@@ -196,6 +215,8 @@ namespace GOL.Classes
                     }
                 }
             }
+            m_Bitmap.Save("test.bmp");
+            
         }
 
     }
