@@ -44,8 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="Classes\Base\CellBase.cs" />
+    <Compile Include="Classes\Base\GridBase.cs" />
+    <Compile Include="Classes\Cell.cs" />
+    <Compile Include="Classes\Grid.cs" />
+    <Compile Include="Classes\World.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
