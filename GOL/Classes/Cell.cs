@@ -8,12 +8,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GOL.Classes.Base;
 
 namespace GOL.Classes
 {
-    class Cell : CellBase
+    [Serializable()]
+    class Cell
     {
-        
+        private const int m_MaxAge = 255;
+        private int m_Age = 0;
+
+        public Cell()
+        {
+        }
+
+        public bool IsAlive
+        {
+            get 
+            { return m_Age > 0 ? true : false; 
+            }
+            set
+            {
+                if (value) m_Age++; else m_Age = 0;
+            }
+        }
+
+        public int Age { get { return m_Age; } }
     }
 }
