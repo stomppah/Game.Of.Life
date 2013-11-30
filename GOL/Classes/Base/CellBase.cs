@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GOL.Classes
+namespace GOL.Classes.Base
 {
     abstract class CellBase
     {

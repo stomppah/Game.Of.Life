@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GOL.Classes
+namespace GOL.Classes.Base
 {
     abstract class GridBase
     {
@@ -24,7 +24,7 @@ namespace GOL.Classes
 
         public GridBase()
         {
-            m_Grid = new Cell[m_Rows, m_Cols];
+            m_Grid = new CellBase[m_Rows, m_Cols];
         }
 
         public void setCellAt(int xCoord, int yCoord)
