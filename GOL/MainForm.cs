@@ -78,7 +78,7 @@ namespace GOL
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
                     m_Grid.loadCellAt(i, j, true);
-                    m_Grid.drawCellAt(i, j);
+                    //m_Grid.drawCellAt(i, j);
                 }
                 Refresh();
             }

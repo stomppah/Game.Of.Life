@@ -18,7 +18,7 @@ namespace GOL.Classes
     class Grid : IDisposable
     {
         //Private Members
-        private static Cell[,] m_ReadCell, m_WriteCells, m_TempCells;
+        private static Cell[,] m_ReadCell, m_WriteCell, m_TempCell;
 
         private const int m_Width = 960;
         private const int m_Height = 530;
@@ -33,16 +33,16 @@ namespace GOL.Classes
         public Grid()
         {
             m_ReadCell = new Cell[m_Rows, m_Cols];
-            m_WriteCells = new Cell[m_Rows, m_Cols];
-            m_TempCells = new Cell[m_Rows, m_Cols];
+            m_WriteCell = new Cell[m_Rows, m_Cols];
+            m_TempCell = new Cell[m_Rows, m_Cols];
 
             initializeGrids();
 
-            //testing!!
-            setupSliderGun();
-
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
+
+            //testing!!
+            setupSliderGun();
         }
 
         public Bitmap Buffer { get { return m_Bitmap; } }
@@ -54,20 +54,21 @@ namespace GOL.Classes
                 for (int j = 0; j < m_Cols; j++)
                 {
                     m_ReadCell[i, j] = new Cell();
-                    m_WriteCells [i, j] = new Cell();
-                    m_TempCells [i, j] = new Cell();
+                    m_WriteCell [i, j] = new Cell();
+                    m_TempCell [i, j] = new Cell();
                 }
             }
         }
         
         private void setCellAt(int xCoord, int yCoord, bool alive)
         {
-            m_WriteCells[xCoord, yCoord].IsAlive = alive;
+            m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
         public void loadCellAt(int xCoord, int yCoord, bool alive)
         {
             m_ReadCell[xCoord, yCoord].IsAlive = alive;
+            drawCellAt(xCoord, yCoord);
         }
 
         private bool liveCellAt(int xCoord, int yCoord)
@@ -127,9 +128,9 @@ namespace GOL.Classes
         //Cleanly swaps data sets.
         private void swapPointers()
         {
-            m_ReadCell = m_TempCells;
-            m_ReadCell = m_WriteCells;
-            m_WriteCells = m_TempCells;
+            m_ReadCell = m_TempCell;
+            m_ReadCell = m_WriteCell;
+            m_WriteCell = m_TempCell;
         }
 
         private void setupSliderGun()
