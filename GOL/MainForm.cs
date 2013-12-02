@@ -14,29 +14,78 @@ namespace GOL
 {
     public partial class MainForm : Form
     {
-        private static Grid g_Read;
+        private static Grid m_Grid;
+        private bool m_MouseDown = false;
 
         public MainForm()
         {
             InitializeComponent();
 
-            g_Read = new Grid();
+            m_Grid = new Grid();
         }
 
         private void Window_Load(object sender, EventArgs e)
         {
-            Refresh();
+            //Refresh();
         }
 
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.DrawImage(g_Read.Buffer, 0, 0);
+            g.DrawImage(m_Grid.Buffer, 0, 0);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            g_Read.nextGrid();
+            m_Grid.generateNextGeneration();
+            Refresh();
+        }
+
+        private void startStopBtn_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = !timer1.Enabled ? true : false;
+            startStopBtn.Text = !timer1.Enabled ? "Run" : "Stop";
+        }
+
+        private void stepBtn_Click(object sender, EventArgs e)
+        {
+            m_Grid.generateNextGeneration();
+            Refresh();
+        }
+
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loadBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.Text = "Conways Game of Life: MouseX: " + e.X + " - MouseY: " + e.Y;
+            if (m_MouseDown)
+            {
+                int i = (int)e.X / 5;
+                int j = (int)e.Y / 5;
+                if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
+                {
+                    m_Grid.loadCellAt(i, j, true);
+                }
+                Refresh();
+            }
+        }
+
+        private void canvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            m_MouseDown = !m_MouseDown ? true : false;
         }
     }
 }

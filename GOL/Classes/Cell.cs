@@ -14,22 +14,24 @@ namespace GOL.Classes
     [Serializable()]
     class Cell
     {
-        private const int m_MaxAge = 255;
         private int m_Age = 0;
-        private bool m_Alive = false;
 
         public bool IsAlive
         {
             get 
             { 
-                return m_Alive; 
+                return m_Age > 0; 
             }
             set
             {
-                m_Alive = value; ;
+                if (value)
+                    m_Age++;
+                else
+                    m_Age = 0;
             }
         }
 
-        public int Age { get { return m_Age; } set { value = m_Age; } }
-    }
-}
+
+    } // class
+
+} //namespace

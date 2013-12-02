@@ -234,19 +234,5 @@
 
 //            drawNewGrid();
 //        }
-
-//        //Cleanly swaps data sets.
-//        public void swapPointers()
-//        {
-//            bool[,] temp = new bool[_rows, _columns];
-//            _read = temp;
-//            _read = _write;
-//            _write = temp;
-//        }
-
-//        void IDisposable.Dispose()
-//        {
-//            _bmp.Dispose();
-//        }
 //    }
 //}

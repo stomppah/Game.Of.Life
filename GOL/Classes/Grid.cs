@@ -7,16 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace GOL.Classes
 {
     [Serializable()]
-    class Grid
+    class Grid : IDisposable
     {
-        private static Cell[,] m_ReadCells, m_WriteCells, m_TempCells;
+        //Private Members
+        private static Cell[,] m_ReadCell, m_WriteCells, m_TempCells;
 
         private const int m_Width = 960;
         private const int m_Height = 530;
@@ -26,47 +28,57 @@ namespace GOL.Classes
 
         private Graphics m_Graphics;
         private Bitmap m_Bitmap;
-
-        public Bitmap Buffer { get { return m_Bitmap; } }
-
+        
+        //Public properties
         public Grid()
         {
-            m_ReadCells = new Cell[m_Rows, m_Cols];
+            m_ReadCell = new Cell[m_Rows, m_Cols];
             m_WriteCells = new Cell[m_Rows, m_Cols];
             m_TempCells = new Cell[m_Rows, m_Cols];
 
-            InitializeGrids();
+            initializeGrids();
 
-            setupSliderGun();
+            //testing!!
+            loadCellAt(1, 1, true);
+            loadCellAt(1, 2, true);
+            loadCellAt(2, 1, true);
+            loadCellAt(2, 2, true);
 
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
         }
 
-        private void InitializeGrids()
+        public Bitmap Buffer { get { return m_Bitmap; } }
+
+        private void initializeGrids()
         {
             for (int i = 0; i < m_Rows; i++)
             {
                 for (int j = 0; j < m_Cols; j++)
                 {
-                    m_ReadCells[i, j] = new Cell();
+                    m_ReadCell[i, j] = new Cell();
                     m_WriteCells [i, j] = new Cell();
                     m_TempCells [i, j] = new Cell();
                 }
             }
         }
-
+        
         private void setCellAt(int xCoord, int yCoord, bool alive)
         {
             m_WriteCells[xCoord, yCoord].IsAlive = alive;
         }
 
-        public bool getCellAt(int xCoord, int yCoord)
+        public void loadCellAt(int xCoord, int yCoord, bool alive)
         {
-            return m_ReadCells[xCoord, yCoord].IsAlive;
+            m_ReadCell[xCoord, yCoord].IsAlive = alive;
         }
 
-        public void nextGrid()
+        private bool liveCellAt(int xCoord, int yCoord)
+        {
+            return m_ReadCell[xCoord, yCoord].IsAlive;
+        }
+
+        public void generateNextGeneration()
         {
             for (int i = 0; i < m_Rows; i++)
             {
@@ -77,7 +89,7 @@ namespace GOL.Classes
                         int liveNeighbours = m_Neighbours(i, j);
 
                         // Implement game of life logic.
-                        if (getCellAt(i, j))
+                        if (liveCellAt(i, j))
                         {
                             if (liveNeighbours == 2 || liveNeighbours == 3)
                             {
@@ -99,6 +111,7 @@ namespace GOL.Classes
                 } //end for
             } //end for
             swapPointers();
+            drawNewGrid();
         }
 
         private int m_Neighbours(int i, int j)
@@ -106,102 +119,100 @@ namespace GOL.Classes
             int liveNeighbours = 0;
 
             // Check row above the cell.
-            if (getCellAt(i, j - 1)) liveNeighbours++;
-            if (m_ReadCells[i - 1, j - 1].IsAlive) liveNeighbours++;
-            if (m_ReadCells[i + 1, j - 1].IsAlive) liveNeighbours++;
+            if (liveCellAt(i, j - 1)) liveNeighbours++;
+            if (liveCellAt(i - 1, j - 1)) liveNeighbours++;
+            if (liveCellAt(i + 1, j - 1)) liveNeighbours++;
 
             // Check row containing the cell.
-            if (m_ReadCells[i - 1, j].IsAlive) liveNeighbours++;
-            if (m_ReadCells[i + 1, j].IsAlive) liveNeighbours++;
+            if (liveCellAt(i - 1, j)) liveNeighbours++;
+            if (liveCellAt(i + 1, j)) liveNeighbours++;
 
             // Check row below the cell.
-            if (m_ReadCells[i - 1, j + 1].IsAlive) liveNeighbours++;
-            if (m_ReadCells[i + 1, j + 1].IsAlive) liveNeighbours++;
-            if (m_ReadCells[i, j + 1].IsAlive) liveNeighbours++;
+            if (liveCellAt(i - 1, j + 1)) liveNeighbours++;
+            if (liveCellAt(i + 1, j + 1)) liveNeighbours++;
+            if (liveCellAt(i, j + 1)) liveNeighbours++;
             return liveNeighbours;
         }
 
         //Cleanly swaps data sets.
         private void swapPointers()
         {
-            m_ReadCells = m_TempCells;
-            m_ReadCells = m_WriteCells;
+            m_ReadCell = m_TempCells;
+            m_ReadCell = m_WriteCells;
             m_WriteCells = m_TempCells;
-            drawNewGrid();
         }
 
         private void setupSliderGun()
         {
-            setCellAt(11, 7, true);
-            setCellAt(11, 8, true);
+            loadCellAt(11, 7, true);
+            loadCellAt(11, 8, true);
 
-            setCellAt(12, 7, true);
-            setCellAt(12, 8, true);
+            loadCellAt(12, 7, true);
+            loadCellAt(12, 8, true);
 
-            setCellAt(21, 7, true);
-            setCellAt(21, 8, true);
-            setCellAt(21, 9, true);
+            loadCellAt(21, 7, true);
+            loadCellAt(21, 8, true);
+            loadCellAt(21, 9, true);
 
-            setCellAt(22, 6, true);
-            setCellAt(22, 10, true);
+            loadCellAt(22, 6, true);
+            loadCellAt(22, 10, true);
 
-            setCellAt(23, 5, true);
-            setCellAt(23, 11, true);
+            loadCellAt(23, 5, true);
+            loadCellAt(23, 11, true);
 
-            setCellAt(24, 5, true);
-            setCellAt(24, 11, true);
+            loadCellAt(24, 5, true);
+            loadCellAt(24, 11, true);
 
-            setCellAt(25, 8, true);
+            loadCellAt(25, 8, true);
 
-            setCellAt(26, 6, true);
-            setCellAt(26, 10, true);
+            loadCellAt(26, 6, true);
+            loadCellAt(26, 10, true);
 
-            setCellAt(27, 7, true);
-            setCellAt(27, 8, true);
-            setCellAt(27, 9, true);
+            loadCellAt(27, 7, true);
+            loadCellAt(27, 8, true);
+            loadCellAt(27, 9, true);
 
-            setCellAt(28, 8, true);
+            loadCellAt(28, 8, true);
 
-            setCellAt(31, 5, true);
-            setCellAt(31, 6, true);
-            setCellAt(31, 7, true);
+            loadCellAt(31, 5, true);
+            loadCellAt(31, 6, true);
+            loadCellAt(31, 7, true);
 
-            setCellAt(32, 5, true);
-            setCellAt(32, 6, true);
-            setCellAt(32, 7, true);
+            loadCellAt(32, 5, true);
+            loadCellAt(32, 6, true);
+            loadCellAt(32, 7, true);
 
-            setCellAt(33, 4, true);
-            setCellAt(33, 8, true);
+            loadCellAt(33, 4, true);
+            loadCellAt(33, 8, true);
 
-            setCellAt(35, 3, true);
-            setCellAt(35, 4, true);
-            setCellAt(35, 8, true);
-            setCellAt(35, 9, true);
+            loadCellAt(35, 3, true);
+            loadCellAt(35, 4, true);
+            loadCellAt(35, 8, true);
+            loadCellAt(35, 9, true);
 
-            setCellAt(45, 5, true);
-            setCellAt(45, 6, true);
+            loadCellAt(45, 5, true);
+            loadCellAt(45, 6, true);
 
-            setCellAt(46, 5, true);
-            setCellAt(46, 6, true);
+            loadCellAt(46, 5, true);
+            loadCellAt(46, 6, true);
         }
 
-        private void drawCell(int x, int y)
+        public void drawCellAt(int x, int y)
         {
-            Color cellColor = getCellAt(x, y) ? Color.Green : Color.Beige;
+            Color cellColor = liveCellAt(x, y) ? Color.Green : Color.Beige;
             SolidBrush brush = new SolidBrush(cellColor);
             Pen pen = new Pen(cellColor);
             Rectangle rect = new Rectangle(x * 5, y * 5, 5, 5);
             
-            if (getCellAt(x, y))
+            if (liveCellAt(x, y))
                 m_Graphics.FillRectangle(brush, rect);
             else
                 m_Graphics.DrawRectangle(pen, rect);
-            
         }
 
         private void drawNewGrid()
         {
-            lock (m_Graphics)
+            lock (m_ReadCell)
             {
                 m_Graphics.Clear(Color.White);
                 for (int i = 0; i < m_Rows; i++)
@@ -210,14 +221,23 @@ namespace GOL.Classes
                     {
                         if ((i >= 0 && i < m_Rows) && (j >= 0 && j < m_Cols))
                         {
-                            drawCell(i, j);
+                            drawCellAt(i, j);
                         }
                     }
                 }
             }
-            m_Bitmap.Save("test.bmp");
-            
         }
 
-    }
-}
+        void IDisposable.Dispose()
+        {
+            m_Bitmap.Dispose();
+        }
+
+    } //class
+
+    class Display
+    {
+
+    } //class
+
+} //namespace
