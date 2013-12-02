@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Classes\Cell.cs" />
     <Compile Include="Classes\Grid.cs" />
-    <Compile Include="Classes\World.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

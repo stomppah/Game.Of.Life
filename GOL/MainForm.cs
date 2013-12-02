@@ -78,6 +78,7 @@ namespace GOL
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
                     m_Grid.loadCellAt(i, j, true);
+                    m_Grid.drawCellAt(i, j);
                 }
                 Refresh();
             }
@@ -85,7 +86,12 @@ namespace GOL
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            m_MouseDown = !m_MouseDown ? true : false;
+            m_MouseDown = true;
+        }
+
+        private void canvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            m_MouseDown = false;
         }
     }
 }

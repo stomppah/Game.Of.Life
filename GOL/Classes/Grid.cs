@@ -39,10 +39,7 @@ namespace GOL.Classes
             initializeGrids();
 
             //testing!!
-            loadCellAt(1, 1, true);
-            loadCellAt(1, 2, true);
-            loadCellAt(2, 1, true);
-            loadCellAt(2, 2, true);
+            setupSliderGun();
 
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
@@ -92,20 +89,13 @@ namespace GOL.Classes
                         if (liveCellAt(i, j))
                         {
                             if (liveNeighbours == 2 || liveNeighbours == 3)
-                            {
                                 setCellAt(i, j, true); // Survival of a cell.
-                            }
                             else
-                            {
                                 setCellAt(i, j, false); // Death from under/overcrowding.
-                            }
                         }
                         else
                         {
-                            if (liveNeighbours == 3)
-                            {
-                                setCellAt(i, j, true); // Birth of a live cell.
-                            }
+                            if (liveNeighbours == 3) setCellAt(i, j, true); // Birth of a live cell.
                         }
                     }
                 } //end for
@@ -116,22 +106,22 @@ namespace GOL.Classes
 
         private int m_Neighbours(int i, int j)
         {
-            int liveNeighbours = 0;
+            int count = 0;
 
             // Check row above the cell.
-            if (liveCellAt(i, j - 1)) liveNeighbours++;
-            if (liveCellAt(i - 1, j - 1)) liveNeighbours++;
-            if (liveCellAt(i + 1, j - 1)) liveNeighbours++;
+            if (liveCellAt(i, j - 1)) count++;
+            if (liveCellAt(i - 1, j - 1)) count++;
+            if (liveCellAt(i + 1, j - 1)) count++;
 
             // Check row containing the cell.
-            if (liveCellAt(i - 1, j)) liveNeighbours++;
-            if (liveCellAt(i + 1, j)) liveNeighbours++;
+            if (liveCellAt(i - 1, j)) count++;
+            if (liveCellAt(i + 1, j)) count++;
 
             // Check row below the cell.
-            if (liveCellAt(i - 1, j + 1)) liveNeighbours++;
-            if (liveCellAt(i + 1, j + 1)) liveNeighbours++;
-            if (liveCellAt(i, j + 1)) liveNeighbours++;
-            return liveNeighbours;
+            if (liveCellAt(i - 1, j + 1)) count++;
+            if (liveCellAt(i + 1, j + 1)) count++;
+            if (liveCellAt(i, j + 1)) count++;
+            return count;
         }
 
         //Cleanly swaps data sets.
