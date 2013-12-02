@@ -73,8 +73,8 @@ namespace GOL
             this.Text = "Conways Game of Life: MouseX: " + e.X + " - MouseY: " + e.Y;
             if (m_MouseDown)
             {
-                int i = (int)e.X / 5;
-                int j = (int)e.Y / 5;
+                int i = (int)e.X / 10;
+                int j = (int)e.Y / 10;
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
                     m_Grid.loadCellAt(i, j, true);

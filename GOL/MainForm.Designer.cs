@@ -47,7 +47,7 @@
             this.canvas.Image = global::GOL.Properties.Resources.Empty;
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(960, 530);
+            this.canvas.Size = new System.Drawing.Size(960, 540);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
@@ -62,7 +62,7 @@
             // 
             // runningInfoStrip
             // 
-            this.runningInfoStrip.Location = new System.Drawing.Point(0, 570);
+            this.runningInfoStrip.Location = new System.Drawing.Point(0, 618);
             this.runningInfoStrip.Name = "runningInfoStrip";
             this.runningInfoStrip.Size = new System.Drawing.Size(960, 22);
             this.runningInfoStrip.TabIndex = 1;
@@ -70,7 +70,7 @@
             // 
             // startStopBtn
             // 
-            this.startStopBtn.Location = new System.Drawing.Point(12, 536);
+            this.startStopBtn.Location = new System.Drawing.Point(12, 581);
             this.startStopBtn.Name = "startStopBtn";
             this.startStopBtn.Size = new System.Drawing.Size(75, 23);
             this.startStopBtn.TabIndex = 2;
@@ -80,7 +80,7 @@
             // 
             // stepBtn
             // 
-            this.stepBtn.Location = new System.Drawing.Point(93, 536);
+            this.stepBtn.Location = new System.Drawing.Point(93, 581);
             this.stepBtn.Name = "stepBtn";
             this.stepBtn.Size = new System.Drawing.Size(75, 23);
             this.stepBtn.TabIndex = 3;
@@ -90,7 +90,7 @@
             // 
             // clearBtn
             // 
-            this.clearBtn.Location = new System.Drawing.Point(174, 536);
+            this.clearBtn.Location = new System.Drawing.Point(174, 581);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(75, 23);
             this.clearBtn.TabIndex = 4;
@@ -100,7 +100,7 @@
             // 
             // loadBtn
             // 
-            this.loadBtn.Location = new System.Drawing.Point(873, 536);
+            this.loadBtn.Location = new System.Drawing.Point(873, 581);
             this.loadBtn.Name = "loadBtn";
             this.loadBtn.Size = new System.Drawing.Size(75, 23);
             this.loadBtn.TabIndex = 5;
@@ -110,7 +110,7 @@
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(792, 536);
+            this.saveBtn.Location = new System.Drawing.Point(792, 581);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(75, 23);
             this.saveBtn.TabIndex = 6;
@@ -122,7 +122,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 592);
+            this.ClientSize = new System.Drawing.Size(960, 640);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.loadBtn);
             this.Controls.Add(this.clearBtn);

@@ -18,13 +18,15 @@ namespace GOL.Classes
     class Grid : IDisposable
     {
         //Private Members
-        private static Cell[,] m_ReadCell, m_WriteCell, m_TempCell;
+        private static Cell[,] m_ReadCell, m_WriteCell;
 
         private const int m_Width = 960;
-        private const int m_Height = 530;
+        private const int m_Height = 540;
 
-        private int m_Rows = m_Width / 5;
-        private int m_Cols = m_Height / 5;
+        private const int m_CSize = 10;
+
+        private int m_Rows = m_Width / m_CSize;
+        private int m_Cols = m_Height / m_CSize;
 
         private Graphics m_Graphics;
         private Bitmap m_Bitmap;
@@ -34,15 +36,14 @@ namespace GOL.Classes
         {
             m_ReadCell = new Cell[m_Rows, m_Cols];
             m_WriteCell = new Cell[m_Rows, m_Cols];
-            m_TempCell = new Cell[m_Rows, m_Cols];
-
+            
             initializeGrids();
 
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
 
             //testing!!
-            setupSliderGun();
+            //setupSliderGun();
         }
 
         public Bitmap Buffer { get { return m_Bitmap; } }
@@ -55,7 +56,6 @@ namespace GOL.Classes
                 {
                     m_ReadCell[i, j] = new Cell();
                     m_WriteCell [i, j] = new Cell();
-                    m_TempCell [i, j] = new Cell();
                 }
             }
         }
@@ -84,19 +84,34 @@ namespace GOL.Classes
                 {
                     if (i > 0 && j > 0 && i < m_Rows - 1 && j < m_Cols - 1)
                     {
-                        int liveNeighbours = m_Neighbours(i, j);
+                        int count = 0;
+
+                        // Check row above the cell.
+                        if (liveCellAt(i, j - 1)) count++;
+                        if (liveCellAt(i - 1, j - 1)) count++;
+                        if (liveCellAt(i + 1, j - 1)) count++;
+
+                        // Check row containing the cell.
+                        if (liveCellAt(i - 1, j)) count++;
+                        if (liveCellAt(i + 1, j)) count++;
+
+                        // Check row below the cell.
+                        if (liveCellAt(i - 1, j + 1)) count++;
+                        if (liveCellAt(i + 1, j + 1)) count++;
+                        if (liveCellAt(i, j + 1)) count++;
 
                         // Implement game of life logic.
                         if (liveCellAt(i, j))
                         {
-                            if (liveNeighbours == 2 || liveNeighbours == 3)
+                            if (count == 2 || count == 3)
                                 setCellAt(i, j, true); // Survival of a cell.
                             else
                                 setCellAt(i, j, false); // Death from under/overcrowding.
                         }
                         else
                         {
-                            if (liveNeighbours == 3) setCellAt(i, j, true); // Birth of a live cell.
+                            if (count == 3) 
+                                setCellAt(i, j, true); // Birth of a live cell.
                         }
                     }
                 } //end for
@@ -105,29 +120,19 @@ namespace GOL.Classes
             drawNewGrid();
         }
 
-        private int m_Neighbours(int i, int j)
-        {
-            int count = 0;
-
-            // Check row above the cell.
-            if (liveCellAt(i, j - 1)) count++;
-            if (liveCellAt(i - 1, j - 1)) count++;
-            if (liveCellAt(i + 1, j - 1)) count++;
-
-            // Check row containing the cell.
-            if (liveCellAt(i - 1, j)) count++;
-            if (liveCellAt(i + 1, j)) count++;
-
-            // Check row below the cell.
-            if (liveCellAt(i - 1, j + 1)) count++;
-            if (liveCellAt(i + 1, j + 1)) count++;
-            if (liveCellAt(i, j + 1)) count++;
-            return count;
-        }
-
         //Cleanly swaps data sets.
         private void swapPointers()
         {
+            Cell[,] m_TempCell = new Cell[m_Rows, m_Cols];
+            for (int i = 0; i < m_Rows; i++)
+            {
+                for (int j = 0; j < m_Cols; j++)
+                {
+                    
+                    m_TempCell [i, j] = new Cell();
+                }
+            }
+        
             m_ReadCell = m_TempCell;
             m_ReadCell = m_WriteCell;
             m_WriteCell = m_TempCell;
@@ -193,7 +198,7 @@ namespace GOL.Classes
             Color cellColor = liveCellAt(x, y) ? Color.Green : Color.Beige;
             SolidBrush brush = new SolidBrush(cellColor);
             Pen pen = new Pen(cellColor);
-            Rectangle rect = new Rectangle(x * 5, y * 5, 5, 5);
+            Rectangle rect = new Rectangle(x * m_CSize, y * m_CSize, m_CSize, m_CSize);
             
             if (liveCellAt(x, y))
                 m_Graphics.FillRectangle(brush, rect);
@@ -217,6 +222,7 @@ namespace GOL.Classes
                     }
                 }
             }
+            m_Bitmap.Save("Empty.bmp");
         }
 
         void IDisposable.Dispose()

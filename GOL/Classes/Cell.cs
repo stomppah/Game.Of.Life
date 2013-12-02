@@ -15,19 +15,17 @@ namespace GOL.Classes
     class Cell
     {
         private int m_Age = 0;
+        private bool m_Alive = false;
 
         public bool IsAlive
         {
             get 
             { 
-                return m_Age > 0; 
+                return m_Alive; 
             }
             set
             {
-                if (value)
-                    m_Age++;
-                else
-                    m_Age = 0;
+                m_Alive = value;
             }
         }
 
