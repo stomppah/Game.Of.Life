@@ -20,13 +20,12 @@ namespace GOL
         public MainForm()
         {
             InitializeComponent();
-
             m_Grid = new Grid();
         }
 
         private void Window_Load(object sender, EventArgs e)
         {
-            //Refresh();
+            
         }
 
         private void canvas_Paint(object sender, PaintEventArgs e)
@@ -55,7 +54,8 @@ namespace GOL
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-
+            m_Grid.ClearAll();
+            Refresh();
         }
 
         private void saveBtn_Click(object sender, EventArgs e)
@@ -78,7 +78,6 @@ namespace GOL
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
                     m_Grid.loadCellAt(i, j, true);
-                    //m_Grid.drawCellAt(i, j);
                 }
                 Refresh();
             }

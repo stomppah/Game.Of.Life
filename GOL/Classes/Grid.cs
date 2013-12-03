@@ -43,10 +43,16 @@ namespace GOL.Classes
             m_Graphics = Graphics.FromImage(m_Bitmap);
 
             //testing!!
-            //setupSliderGun();
+            setupSliderGun();
         }
 
         public Bitmap Buffer { get { return m_Bitmap; } }
+
+        public void ClearAll()
+        {
+            initializeGrids();
+            generateNextGeneration();
+        }
 
         private void initializeGrids()
         {
@@ -222,7 +228,6 @@ namespace GOL.Classes
                     }
                 }
             }
-            m_Bitmap.Save("Empty.bmp");
         }
 
         void IDisposable.Dispose()
