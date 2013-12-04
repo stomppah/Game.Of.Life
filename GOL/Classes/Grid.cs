@@ -1,8 +1,7 @@
 ﻿/**
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
- * Date: 30/11/13
- * Time: 13:50
+ * Date: 29/11/13
  */
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ using System.Threading;
 namespace GOL.Classes
 {
     [Serializable()]
-    class Grid : IDisposable
+    class Grid : IDisposable : ISerializable
     {
         //Private Members
         private static Cell[,] m_ReadCell, m_WriteCell;
