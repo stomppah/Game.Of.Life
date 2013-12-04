@@ -9,13 +9,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 
 namespace GOL.Classes
 {
     [Serializable()]
-    class Grid : IDisposable
+    class Grid : IDisposable, ISerializable
     {
         //Private Members
         private static Cell[,] m_ReadCell, m_WriteCell;
@@ -90,6 +92,7 @@ namespace GOL.Classes
             return m_ReadCell[xCoord, yCoord].IsAlive;
         }
 
+        // Steps through the grid once, implementing the Game of Life rules.
         public void generateNextGeneration()
         {
             for (int i = 0; i < m_Rows; i++)
@@ -207,7 +210,8 @@ namespace GOL.Classes
             loadCellAt(46, 6, true);
         }
 
-        public void drawCellAt(int x, int y)
+        // Responsible for drawing dead or live cells.
+        private void drawCellAt(int x, int y)
         {
             Color cellColor = liveCellAt(x, y) ? Color.Green : Color.Beige;
             SolidBrush brush = new SolidBrush(cellColor);
@@ -243,10 +247,8 @@ namespace GOL.Classes
             m_Bitmap.Dispose();
         }
 
-    } //class
+        Error	1	'GOL.Classes.Grid' does not implement interface member 'System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)'	C:\Users\Antz\Dropbox\GOL\GOL\Classes\Grid.cs	20	11	GOL
 
-    class Display
-    {
 
     } //class
 
