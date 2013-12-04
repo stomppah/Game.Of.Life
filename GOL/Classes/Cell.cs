@@ -2,6 +2,7 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
+ * Description: The cell class provides storage to determine the cells state and age (age not implemented yet).
  */
 using System;
 using System.Collections.Generic;

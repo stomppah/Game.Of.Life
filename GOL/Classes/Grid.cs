@@ -2,6 +2,7 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
+ * Description: The Grid class is responsible for both read and write gridas as well as drawing them to a bitmap for display.
  */
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading;
 namespace GOL.Classes
 {
     [Serializable()]
-    class Grid : IDisposable : ISerializable
+    class Grid : IDisposable
     {
         //Private Members
         private static Cell[,] m_ReadCell, m_WriteCell;
@@ -72,8 +73,16 @@ namespace GOL.Classes
 
         public void loadCellAt(int xCoord, int yCoord, bool alive)
         {
-            m_ReadCell[xCoord, yCoord].IsAlive = alive;
-            drawCellAt(xCoord, yCoord);
+            try
+            {
+                m_ReadCell[xCoord, yCoord].IsAlive = alive;
+                drawCellAt(xCoord, yCoord);
+            }
+            catch (IndexOutOfRangeException e)
+            {  
+                // User has painted past the edge of the grid, in this case 
+                // there is nothing to paint to so the error can be ignored.
+            }
         }
 
         private bool liveCellAt(int xCoord, int yCoord)
