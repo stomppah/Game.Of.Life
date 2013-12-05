@@ -104,7 +104,7 @@
             this.loadBtn.Name = "loadBtn";
             this.loadBtn.Size = new System.Drawing.Size(75, 23);
             this.loadBtn.TabIndex = 5;
-            this.loadBtn.Text = "Load";
+            this.loadBtn.Text = "Load Gun";
             this.loadBtn.UseVisualStyleBackColor = true;
             this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
             // 

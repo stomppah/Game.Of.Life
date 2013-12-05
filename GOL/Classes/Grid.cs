@@ -43,7 +43,7 @@ namespace GOL.Classes
             m_Graphics = Graphics.FromImage(m_Bitmap);
 
             //testing!!
-            setupSliderGun();
+            //setupSliderGun();
         }
 
         public Bitmap Buffer { get { return m_Bitmap; } }
@@ -152,7 +152,7 @@ namespace GOL.Classes
             m_WriteCell = m_TempCell;
         }
 
-        private void setupSliderGun()
+        public void setupSliderGun()
         {
             loadCellAt(11, 7, true);
             loadCellAt(11, 8, true);

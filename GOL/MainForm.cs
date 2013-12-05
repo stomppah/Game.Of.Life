@@ -70,7 +70,8 @@ namespace GOL
 
         private void loadBtn_Click(object sender, EventArgs e)
         {
-
+            m_Grid.setupSliderGun();
+            Refresh();
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
