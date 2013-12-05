@@ -81,8 +81,9 @@ namespace GOL
             this.Text = "Conways Game of Life: MouseX: " + e.X + " - MouseY: " + e.Y;
             if (m_MouseDown)
             {
-                int i = (int)e.X / 10;
-                int j = (int)e.Y / 10;
+                // bloody important
+                int i = (int)e.X / m_Grid.CellSize;
+                int j = (int)e.Y / m_Grid.CellSize;
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
                     m_Grid.paintCellAt(i, j, true);
@@ -100,5 +101,6 @@ namespace GOL
         {
             m_MouseDown = false;
         }
+    
     }
 }

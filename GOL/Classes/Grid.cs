@@ -35,9 +35,11 @@ namespace GOL.Classes
         private Graphics m_Graphics;
         private Bitmap m_Bitmap;
 
+        // Public properties
         public Bitmap Buffer { get { return m_Bitmap; } }
 
-        // Public properties
+        public int CellSize { get { return m_CSize; } }
+
         public Grid()
         {
             m_ReadCell = new Cell[m_Rows, m_Cols];
@@ -54,37 +56,6 @@ namespace GOL.Classes
             m_WriteCell = (Cell[,])info.GetValue("m_WriteCell", typeof(Cell[,]));
             m_ReadCell  = (Cell[,])info.GetValue("m_ReadCell",  typeof(Cell[,]));
             m_Bitmap    = (Bitmap)info.GetValue("m_Bitmap",     typeof(Bitmap));
-        }
-
-        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
-        {
-            info.AddValue("m_WriteCell",    m_WriteCell);
-            info.AddValue("m_ReadCell",     m_ReadCell);
-            info.AddValue("m_Bitmap",       m_Bitmap);
-            info.AddValue("m_Graphics",     m_Graphics);
-        }
-
-        public void ClearAll()
-        {
-            initializeGrids();
-            generateNextGeneration();
-        }
-
-        private void initializeGrids()
-        {
-            for (int i = 0; i < m_Rows; i++)
-            {
-                for (int j = 0; j < m_Cols; j++)
-                {
-                    m_ReadCell[i, j] = new Cell();
-                    m_WriteCell [i, j] = new Cell();
-                }
-            }
-        }
-        
-        private void setCellAt(int xCoord, int yCoord, bool alive)
-        {
-            m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
         // Used to paint to the grid and simultaneously add to the correct grid.
@@ -153,7 +124,25 @@ namespace GOL.Classes
             drawNewGrid();
         }
 
-        // Cleanly swaps data sets.
+        private void drawNewGrid()
+        {
+            lock (m_ReadCell)
+            {
+                m_Graphics.Clear(Color.White);
+                for (int i = 0; i < m_Rows; i++)
+                {
+                    for (int j = 0; j < m_Cols; j++)
+                    {
+                        if ((i >= 0 && i < m_Rows) && (j >= 0 && j < m_Cols))
+                        {
+                            drawCellAt(i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Cleanly swaps data sets.......
         private void swapPointers()
         {
             Cell[,] l_TempCell = new Cell[m_Rows, m_Cols];
@@ -171,6 +160,7 @@ namespace GOL.Classes
             m_WriteCell = l_TempCell;
         }
 
+        // Temp function for loading interesting preset!
         public void setupSliderGun()
         {
             paintCellAt(11, 7, true);
@@ -240,25 +230,31 @@ namespace GOL.Classes
                 m_Graphics.DrawRectangle(pen, rect);
         }
 
-        private void drawNewGrid()
+        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
-            lock (m_ReadCell)
+            info.AddValue("m_WriteCell", m_WriteCell);
+            info.AddValue("m_ReadCell", m_ReadCell);
+            info.AddValue("m_Bitmap", m_Bitmap);
+            info.AddValue("m_Graphics", m_Graphics);
+        }
+
+        private void initializeGrids()
+        {
+            for (int i = 0; i < m_Rows; i++)
             {
-                m_Graphics.Clear(Color.White);
-                for (int i = 0; i < m_Rows; i++)
+                for (int j = 0; j < m_Cols; j++)
                 {
-                    for (int j = 0; j < m_Cols; j++)
-                    {
-                        if ((i >= 0 && i < m_Rows) && (j >= 0 && j < m_Cols))
-                        {
-                            drawCellAt(i, j);
-                        }
-                    }
+                    m_ReadCell[i, j] = new Cell();
+                    m_WriteCell[i, j] = new Cell();
                 }
             }
         }
 
-        // Dispose stuff :)
+        private void setCellAt(int xCoord, int yCoord, bool alive)
+        {
+            m_WriteCell[xCoord, yCoord].IsAlive = alive;
+        }
+
         private void Dispose()
         {
             m_Bitmap.Dispose();
