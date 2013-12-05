@@ -2,7 +2,8 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
- * Description: The Grid class is responsible for both read and write gridas as well as drawing them to a bitmap for display.
+ * Description: The Grid class is responsible for both read and write grids,
+ * as well as drawing them to a bitmap for display.
  */
 using System;
 using System.Collections.Generic;
@@ -43,9 +44,6 @@ namespace GOL.Classes
 
             m_Bitmap = new Bitmap(m_Width, m_Height);
             m_Graphics = Graphics.FromImage(m_Bitmap);
-
-            //testing!!
-            //setupSliderGun();
         }
 
         public Bitmap Buffer { get { return m_Bitmap; } }
@@ -73,6 +71,7 @@ namespace GOL.Classes
             m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
+        // used to paint to the grid
         public void loadCellAt(int xCoord, int yCoord, bool alive)
         {
             try
@@ -87,6 +86,7 @@ namespace GOL.Classes
             }
         }
 
+        // checks for a live cell at the specified coordinates
         private bool liveCellAt(int xCoord, int yCoord)
         {
             return m_ReadCell[xCoord, yCoord].IsAlive;
@@ -140,19 +140,19 @@ namespace GOL.Classes
         //Cleanly swaps data sets.
         private void swapPointers()
         {
-            Cell[,] m_TempCell = new Cell[m_Rows, m_Cols];
+            Cell[,] l_TempCell = new Cell[m_Rows, m_Cols];
             for (int i = 0; i < m_Rows; i++)
             {
                 for (int j = 0; j < m_Cols; j++)
                 {
                     
-                    m_TempCell [i, j] = new Cell();
+                    l_TempCell [i, j] = new Cell();
                 }
             }
         
-            m_ReadCell = m_TempCell;
+            m_ReadCell = l_TempCell;
             m_ReadCell = m_WriteCell;
-            m_WriteCell = m_TempCell;
+            m_WriteCell = l_TempCell;
         }
 
         public void setupSliderGun()
@@ -242,13 +242,15 @@ namespace GOL.Classes
             }
         }
 
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext ctx)
+        {
+
+        }
+
         void IDisposable.Dispose()
         {
             m_Bitmap.Dispose();
         }
-
-        Error	1	'GOL.Classes.Grid' does not implement interface member 'System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)'	C:\Users\Antz\Dropbox\GOL\GOL\Classes\Grid.cs	20	11	GOL
-
 
     } //class
 
