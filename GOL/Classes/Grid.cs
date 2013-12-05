@@ -34,8 +34,10 @@ namespace GOL.Classes
 
         private Graphics m_Graphics;
         private Bitmap m_Bitmap;
-        
-        //Public properties
+
+        public Bitmap Buffer { get { return m_Bitmap; } }
+
+        // Public properties
         public Grid()
         {
             m_ReadCell = new Cell[m_Rows, m_Cols];
@@ -47,7 +49,20 @@ namespace GOL.Classes
             m_Graphics = Graphics.FromImage(m_Bitmap);
         }
 
-        public Bitmap Buffer { get { return m_Bitmap; } }
+        public Grid(SerializationInfo info, StreamingContext ctxt)
+        {
+            m_WriteCell = (Cell[,])info.GetValue("m_WriteCell", typeof(Cell[,]));
+            m_ReadCell  = (Cell[,])info.GetValue("m_ReadCell",  typeof(Cell[,]));
+            m_Bitmap    = (Bitmap)info.GetValue("m_Bitmap",     typeof(Bitmap));
+        }
+
+        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
+        {
+            info.AddValue("m_WriteCell",    m_WriteCell);
+            info.AddValue("m_ReadCell",     m_ReadCell);
+            info.AddValue("m_Bitmap",       m_Bitmap);
+            info.AddValue("m_Graphics",     m_Graphics);
+        }
 
         public void ClearAll()
         {
@@ -72,7 +87,7 @@ namespace GOL.Classes
             m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
-        // used to paint to the grid and simultaneously add to the correct grid
+        // Used to paint to the grid and simultaneously add to the correct grid.
         public void paintCellAt(int xCoord, int yCoord, bool alive)
         {
             try
@@ -87,7 +102,7 @@ namespace GOL.Classes
             }
         }
 
-        // checks for a live cell at the specified coordinates
+        // Checks for a live cell at the specified coordinates.
         private bool liveCellAt(int xCoord, int yCoord)
         {
             return m_ReadCell[xCoord, yCoord].IsAlive;
@@ -138,7 +153,7 @@ namespace GOL.Classes
             drawNewGrid();
         }
 
-        //Cleanly swaps data sets.
+        // Cleanly swaps data sets.
         private void swapPointers()
         {
             Cell[,] l_TempCell = new Cell[m_Rows, m_Cols];
@@ -243,14 +258,7 @@ namespace GOL.Classes
             }
         }
 
-        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
-        {
-            info.AddValue("m_WriteCell", m_WriteCell);
-            info.AddValue("m_ReadCell", m_ReadCell);
-            info.AddValue("m_Bitmap", m_Bitmap);
-            info.AddValue("m_Graphics", m_Graphics);
-        }
-
+        // Dispose stuff :)
         private void Dispose()
         {
             m_Bitmap.Dispose();

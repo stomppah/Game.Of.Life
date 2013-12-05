@@ -27,6 +27,12 @@ namespace GOL.Classes
             }
         }
 
+        public Cell(SerializationInfo info, StreamingContext ctxt)
+        {
+            m_Age = (int)info.GetValue("m_Age", typeof(int));
+            m_Alive = (bool)info.GetValue("m_Alive", typeof(bool));
+        }
+
         private void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
             info.AddValue("m_Age", m_Age);
