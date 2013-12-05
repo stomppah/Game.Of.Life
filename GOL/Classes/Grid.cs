@@ -71,8 +71,8 @@ namespace GOL.Classes
             m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
-        // used to paint to the grid
-        public void loadCellAt(int xCoord, int yCoord, bool alive)
+        // used to paint to the grid and simultaneously add to the correct grid
+        public void paintCellAt(int xCoord, int yCoord, bool alive)
         {
             try
             {
@@ -157,57 +157,57 @@ namespace GOL.Classes
 
         public void setupSliderGun()
         {
-            loadCellAt(11, 7, true);
-            loadCellAt(11, 8, true);
+            paintCellAt(11, 7, true);
+            paintCellAt(11, 8, true);
 
-            loadCellAt(12, 7, true);
-            loadCellAt(12, 8, true);
+            paintCellAt(12, 7, true);
+            paintCellAt(12, 8, true);
 
-            loadCellAt(21, 7, true);
-            loadCellAt(21, 8, true);
-            loadCellAt(21, 9, true);
+            paintCellAt(21, 7, true);
+            paintCellAt(21, 8, true);
+            paintCellAt(21, 9, true);
 
-            loadCellAt(22, 6, true);
-            loadCellAt(22, 10, true);
+            paintCellAt(22, 6, true);
+            paintCellAt(22, 10, true);
 
-            loadCellAt(23, 5, true);
-            loadCellAt(23, 11, true);
+            paintCellAt(23, 5, true);
+            paintCellAt(23, 11, true);
 
-            loadCellAt(24, 5, true);
-            loadCellAt(24, 11, true);
+            paintCellAt(24, 5, true);
+            paintCellAt(24, 11, true);
 
-            loadCellAt(25, 8, true);
+            paintCellAt(25, 8, true);
 
-            loadCellAt(26, 6, true);
-            loadCellAt(26, 10, true);
+            paintCellAt(26, 6, true);
+            paintCellAt(26, 10, true);
 
-            loadCellAt(27, 7, true);
-            loadCellAt(27, 8, true);
-            loadCellAt(27, 9, true);
+            paintCellAt(27, 7, true);
+            paintCellAt(27, 8, true);
+            paintCellAt(27, 9, true);
 
-            loadCellAt(28, 8, true);
+            paintCellAt(28, 8, true);
 
-            loadCellAt(31, 5, true);
-            loadCellAt(31, 6, true);
-            loadCellAt(31, 7, true);
+            paintCellAt(31, 5, true);
+            paintCellAt(31, 6, true);
+            paintCellAt(31, 7, true);
 
-            loadCellAt(32, 5, true);
-            loadCellAt(32, 6, true);
-            loadCellAt(32, 7, true);
+            paintCellAt(32, 5, true);
+            paintCellAt(32, 6, true);
+            paintCellAt(32, 7, true);
 
-            loadCellAt(33, 4, true);
-            loadCellAt(33, 8, true);
+            paintCellAt(33, 4, true);
+            paintCellAt(33, 8, true);
 
-            loadCellAt(35, 3, true);
-            loadCellAt(35, 4, true);
-            loadCellAt(35, 8, true);
-            loadCellAt(35, 9, true);
+            paintCellAt(35, 3, true);
+            paintCellAt(35, 4, true);
+            paintCellAt(35, 8, true);
+            paintCellAt(35, 9, true);
 
-            loadCellAt(45, 5, true);
-            loadCellAt(45, 6, true);
+            paintCellAt(45, 5, true);
+            paintCellAt(45, 6, true);
 
-            loadCellAt(46, 5, true);
-            loadCellAt(46, 6, true);
+            paintCellAt(46, 5, true);
+            paintCellAt(46, 6, true);
         }
 
         // Responsible for drawing dead or live cells.
@@ -242,12 +242,15 @@ namespace GOL.Classes
             }
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext ctx)
+        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
-
+            info.AddValue("m_WriteCell", m_WriteCell);
+            info.AddValue("m_ReadCell", m_ReadCell);
+            info.AddValue("m_Bitmap", m_Bitmap);
+            info.AddValue("m_Graphics", m_Graphics);
         }
 
-        void IDisposable.Dispose()
+        private void Dispose()
         {
             m_Bitmap.Dispose();
         }

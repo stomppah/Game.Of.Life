@@ -83,7 +83,7 @@ namespace GOL
                 int j = (int)e.Y / 10;
                 if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
                 {
-                    m_Grid.loadCellAt(i, j, true);
+                    m_Grid.paintCellAt(i, j, true);
                 }
                 Refresh();
             }

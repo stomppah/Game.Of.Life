@@ -7,12 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GOL.Classes
 {
     [Serializable()]
-    class Cell
+    class Cell : ISerializable
     {
         private int m_Age = 0;
         private bool m_Alive = false;
@@ -29,6 +30,11 @@ namespace GOL.Classes
             }
         }
 
+        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
+        {
+            info.AddValue("m_Age", m_Age);
+            info.AddValue("m_Alive", m_Alive);
+        }
 
     } // class
 
