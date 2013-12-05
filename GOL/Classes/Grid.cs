@@ -2,8 +2,9 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
- * Description: The Grid class is responsible for both read and write grids,
- * as well as drawing them to a bitmap for display.
+ * Description: The Grid class is responsible for both read 
+ * and write grids, as well as drawing them to a bitmap for display.
+ * URL: https://github.com/stomppah/Conways-Game-in-.NET
  */
 using System;
 using System.Collections.Generic;

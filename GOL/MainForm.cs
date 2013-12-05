@@ -2,6 +2,8 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
+ * Description: Provides human interation mechanisms.
+ * URL: https://github.com/stomppah/Conways-Game-in-.NET
  */
 using System;
 using System.Collections.Generic;
