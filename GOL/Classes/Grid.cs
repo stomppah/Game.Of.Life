@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -151,7 +152,7 @@ namespace GOL.Classes
                 for (int j = 0; j < m_Cols; j++)
                 {
                     
-                    l_TempCell [i, j] = new Cell();
+                    l_TempCell [i, j] = new Cell(|);
                 }
             }
         
@@ -159,6 +160,7 @@ namespace GOL.Classes
             m_ReadCell = m_WriteCell;
             m_WriteCell = l_TempCell;
         }
+        // .......
 
         // Temp function for loading interesting preset!
         public void setupSliderGun()
@@ -255,11 +257,26 @@ namespace GOL.Classes
             m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
-        private void Dispose()
+        private void IDisposable.Dispose()
         {
             m_Bitmap.Dispose();
         }
 
+        public void Serialise()
+        {
+            // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
+            // Open a file and serialize the object into it in binary format.
+            // EmployeeInfo.osl is the file that we are creating. 
+            // Note:- you can give any extension you want for your file
+            // If you use custom extensions, then the user will now 
+            //   that the file is associated with your program.
+            Stream stream = File.Open("EmployeeInfo.osl", FileMode.Create);
+            BinaryFormatter bformatter = new BinaryFormatter();
+
+            Console.WriteLine("Writing Employee Information");
+            bformatter.Serialize(stream, mp);
+            stream.Close();
+        }
     } //class
 
 } //namespace
