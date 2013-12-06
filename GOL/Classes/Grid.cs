@@ -152,7 +152,7 @@ namespace GOL.Classes
                 for (int j = 0; j < m_Cols; j++)
                 {
                     
-                    l_TempCell [i, j] = new Cell(|);
+                    l_TempCell [i, j] = new Cell();
                 }
             }
         
@@ -257,7 +257,7 @@ namespace GOL.Classes
             m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
-        private void IDisposable.Dispose()
+        void IDisposable.Dispose()
         {
             m_Bitmap.Dispose();
         }
@@ -270,11 +270,11 @@ namespace GOL.Classes
             // Note:- you can give any extension you want for your file
             // If you use custom extensions, then the user will now 
             //   that the file is associated with your program.
-            Stream stream = File.Open("EmployeeInfo.osl", FileMode.Create);
+            Stream stream = File.Open("State.gol", FileMode.Create);
             BinaryFormatter bformatter = new BinaryFormatter();
 
-            Console.WriteLine("Writing Employee Information");
-            bformatter.Serialize(stream, mp);
+            Console.WriteLine("Writing GOL Information");
+            bformatter.Serialize(stream, this);
             stream.Close();
         }
     } //class
