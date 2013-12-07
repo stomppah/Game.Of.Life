@@ -35,7 +35,7 @@ namespace GOL
 
         private void Window_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void canvas_Paint(object sender, PaintEventArgs e)
@@ -70,35 +70,53 @@ namespace GOL
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
-            // Open a file and serialize the object into it in binary format.
-            // State.gol is the file that we are creating. 
-            // Note:- you can give any extension you want for your file
-            // If you use custom extensions, then the user will now 
-            //   that the file is associated with your program.
-            Stream stream = File.Open("State.gol", FileMode.Create);
-            BinaryFormatter bformatter = new BinaryFormatter();
+            string saveFile = "";
+            saveFileDialog1.Title = "Save current state of the game.";
+            saveFileDialog1.FileName = "";
 
-            Console.WriteLine("Writing GOL Information");
-            bformatter.Serialize(stream, m_Grid);
-            stream.Close();
+            saveFileDialog1.Filter = "GOL Files|*.gol";
+
+            if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                saveFile = saveFileDialog1.FileName;
+                // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
+                // Open a file and serialize the object into it in binary format.
+                // State.gol is the file that we are creating. 
+                // Note:- you can give any extension you want for your file
+                // If you use custom extensions, then the user will now 
+                //   that the file is associated with your program.
+                Stream stream = File.Open(saveFile, FileMode.Create);
+                BinaryFormatter bformatter = new BinaryFormatter();
+
+                Console.WriteLine("Writing GOL Information");
+                bformatter.Serialize(stream, m_Grid);
+                stream.Close();
+            }
         }
 
         private void loadBtn_Click(object sender, EventArgs e)
         {
-            //m_Grid.setupSliderGun();
-            //Refresh();
+            string loadFile = "";
+            openFileDialog1.Title = "Load saved game state.";
+            openFileDialog1.FileName = "";
 
-            //Clear mp for further usage.
-            m_Grid = null;
+            openFileDialog1.Filter = "GOL Files|*.gol";
 
-            //Open the file written above and read values from it.
-            Stream stream = File.Open("State.gol", FileMode.Open);
-            BinaryFormatter bformatter = new BinaryFormatter();
+            if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
+            {
+                loadFile = openFileDialog1.FileName;
 
-            Console.WriteLine("Reading GOL Information");
-            m_Grid = (Grid)bformatter.Deserialize(stream);
-            stream.Close();
+                //Clear mp for further usage.
+                m_Grid = null;
+
+                //Open the file written above and read values from it.
+                Stream stream = File.Open(loadFile, FileMode.Open);
+                BinaryFormatter bformatter = new BinaryFormatter();
+
+                Console.WriteLine("Reading GOL Information");
+                m_Grid = (Grid)bformatter.Deserialize(stream);
+                stream.Close();
+            }
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)

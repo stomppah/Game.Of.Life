@@ -168,62 +168,6 @@ namespace GOL.Classes
         }
         // .......
 
-        // Temp function for loading interesting preset!
-        public void setupSliderGun()
-        {
-            paintCellAt(11, 7, true);
-            paintCellAt(11, 8, true);
-
-            paintCellAt(12, 7, true);
-            paintCellAt(12, 8, true);
-
-            paintCellAt(21, 7, true);
-            paintCellAt(21, 8, true);
-            paintCellAt(21, 9, true);
-
-            paintCellAt(22, 6, true);
-            paintCellAt(22, 10, true);
-
-            paintCellAt(23, 5, true);
-            paintCellAt(23, 11, true);
-
-            paintCellAt(24, 5, true);
-            paintCellAt(24, 11, true);
-
-            paintCellAt(25, 8, true);
-
-            paintCellAt(26, 6, true);
-            paintCellAt(26, 10, true);
-
-            paintCellAt(27, 7, true);
-            paintCellAt(27, 8, true);
-            paintCellAt(27, 9, true);
-
-            paintCellAt(28, 8, true);
-
-            paintCellAt(31, 5, true);
-            paintCellAt(31, 6, true);
-            paintCellAt(31, 7, true);
-
-            paintCellAt(32, 5, true);
-            paintCellAt(32, 6, true);
-            paintCellAt(32, 7, true);
-
-            paintCellAt(33, 4, true);
-            paintCellAt(33, 8, true);
-
-            paintCellAt(35, 3, true);
-            paintCellAt(35, 4, true);
-            paintCellAt(35, 8, true);
-            paintCellAt(35, 9, true);
-
-            paintCellAt(45, 5, true);
-            paintCellAt(45, 6, true);
-
-            paintCellAt(46, 5, true);
-            paintCellAt(46, 6, true);
-        }
-
         // Responsible for drawing dead or live cells.
         private void drawCellAt(int x, int y)
         {
