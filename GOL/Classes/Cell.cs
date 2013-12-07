@@ -38,7 +38,7 @@ namespace GOL.Classes
             // TODO: Complete member initialization
         }
 
-        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
+        public void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
             info.AddValue("m_Age", m_Age);
             info.AddValue("m_Alive", m_Alive);

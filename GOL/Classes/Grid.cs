@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -57,6 +56,7 @@ namespace GOL.Classes
             m_WriteCell = (Cell[,])info.GetValue("m_WriteCell", typeof(Cell[,]));
             m_ReadCell  = (Cell[,])info.GetValue("m_ReadCell",  typeof(Cell[,]));
             m_Bitmap    = (Bitmap)info.GetValue("m_Bitmap",     typeof(Bitmap));
+            m_Graphics  = (Graphics)info.GetValue("m_Graphics", typeof(Graphics));
         }
 
         // Used to paint to the grid and simultaneously add to the correct grid.
@@ -78,6 +78,12 @@ namespace GOL.Classes
         private bool liveCellAt(int xCoord, int yCoord)
         {
             return m_ReadCell[xCoord, yCoord].IsAlive;
+        }
+
+        public void ClearAll()
+        {
+            initializeGrids();
+            generateNextGeneration();
         }
 
         // Steps through the grid once, implementing the Game of Life rules.
@@ -232,7 +238,7 @@ namespace GOL.Classes
                 m_Graphics.DrawRectangle(pen, rect);
         }
 
-        private void GetObjectData(SerializationInfo info, StreamingContext ctx)
+        public void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
             info.AddValue("m_WriteCell", m_WriteCell);
             info.AddValue("m_ReadCell", m_ReadCell);
@@ -262,21 +268,6 @@ namespace GOL.Classes
             m_Bitmap.Dispose();
         }
 
-        public void Serialise()
-        {
-            // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
-            // Open a file and serialize the object into it in binary format.
-            // EmployeeInfo.osl is the file that we are creating. 
-            // Note:- you can give any extension you want for your file
-            // If you use custom extensions, then the user will now 
-            //   that the file is associated with your program.
-            Stream stream = File.Open("State.gol", FileMode.Create);
-            BinaryFormatter bformatter = new BinaryFormatter();
-
-            Console.WriteLine("Writing GOL Information");
-            bformatter.Serialize(stream, this);
-            stream.Close();
-        }
     } //class
 
 } //namespace
