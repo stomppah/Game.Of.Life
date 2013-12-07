@@ -72,7 +72,7 @@ namespace GOL
         {
             // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
             // Open a file and serialize the object into it in binary format.
-            // EmployeeInfo.osl is the file that we are creating. 
+            // State.gol is the file that we are creating. 
             // Note:- you can give any extension you want for your file
             // If you use custom extensions, then the user will now 
             //   that the file is associated with your program.
@@ -80,7 +80,7 @@ namespace GOL
             BinaryFormatter bformatter = new BinaryFormatter();
 
             Console.WriteLine("Writing GOL Information");
-            bformatter.Serialize(stream, this);
+            bformatter.Serialize(stream, m_Grid);
             stream.Close();
         }
 

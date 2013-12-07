@@ -15,14 +15,17 @@ using System.Text;
 namespace GOL.Classes
 {
     [Serializable()]
-    class Cell : ISerializable
+    struct Cell : ISerializable
     {
-        private int m_Age = 0;
-        private bool m_Alive = false;
+        public int m_Age;
+        public bool m_Alive;
 
         public bool IsAlive { get { return m_Alive; }
             set
             {
+                if (value == false)
+                { m_Age = 0; }
+                else { m_Age++; }
                 m_Alive = value;
             }
         }
@@ -33,10 +36,7 @@ namespace GOL.Classes
             m_Alive = (bool)info.GetValue("m_Alive", typeof(bool));
         }
 
-        public Cell()
-        {
-            // TODO: Complete member initialization
-        }
+       
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {

@@ -55,8 +55,8 @@ namespace GOL.Classes
         {
             m_WriteCell = (Cell[,])info.GetValue("m_WriteCell", typeof(Cell[,]));
             m_ReadCell  = (Cell[,])info.GetValue("m_ReadCell",  typeof(Cell[,]));
-            m_Bitmap    = (Bitmap)info.GetValue("m_Bitmap",     typeof(Bitmap));
-            m_Graphics  = (Graphics)info.GetValue("m_Graphics", typeof(Graphics));
+            m_Bitmap    = (Bitmap)info.GetValue("m_Bitmap", typeof(Bitmap));
+            m_Graphics  = Graphics.FromImage(m_Bitmap);
         }
 
         // Used to paint to the grid and simultaneously add to the correct grid.
@@ -243,7 +243,6 @@ namespace GOL.Classes
             info.AddValue("m_WriteCell", m_WriteCell);
             info.AddValue("m_ReadCell", m_ReadCell);
             info.AddValue("m_Bitmap", m_Bitmap);
-            info.AddValue("m_Graphics", m_Graphics);
         }
 
         private void initializeGrids()
