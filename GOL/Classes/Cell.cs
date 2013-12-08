@@ -2,7 +2,7 @@
  * Author: Anthony Woodward
  * Email: a.woodward6237@student.leedsmet.ac.uk
  * Date: 29/11/13
- * Description: The cell class provides storage to determine
+ * Description: The cell struct provides storage to determine
  * the cells state and age (age not implemented yet).
  * URL: https://github.com/stomppah/Conways-Game-in-.NET
  */
