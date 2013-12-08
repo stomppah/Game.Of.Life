@@ -79,12 +79,7 @@ namespace GOL
             if (saveFileDialog1.ShowDialog() != DialogResult.Cancel)
             {
                 saveFile = saveFileDialog1.FileName;
-                // @See: http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
-                // Open a file and serialize the object into it in binary format.
-                // State.gol is the file that we are creating. 
-                // Note:- you can give any extension you want for your file
-                // If you use custom extensions, then the user will now 
-                //   that the file is associated with your program.
+
                 Stream stream = File.Open(saveFile, FileMode.Create);
                 BinaryFormatter bformatter = new BinaryFormatter();
 
@@ -116,6 +111,7 @@ namespace GOL
                 Console.WriteLine("Reading GOL Information");
                 m_Grid = (Grid)bformatter.Deserialize(stream);
                 stream.Close();
+                Refresh();
             }
         }
 
