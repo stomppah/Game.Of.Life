@@ -36,8 +36,6 @@ namespace GOL.Classes
             m_Alive = (bool)info.GetValue("m_Alive", typeof(bool));
         }
 
-       
-
         public void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
             info.AddValue("m_Age", m_Age);

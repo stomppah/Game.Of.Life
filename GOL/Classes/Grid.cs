@@ -51,6 +51,7 @@ namespace GOL.Classes
             m_Graphics = Graphics.FromImage(m_Bitmap);
         }
 
+        // Deserialises object from file
         public Grid(SerializationInfo info, StreamingContext ctxt)
         {
             m_WriteCell = (Cell[,])info.GetValue("m_WriteCell", typeof(Cell[,]));
@@ -80,6 +81,13 @@ namespace GOL.Classes
             return m_ReadCell[xCoord, yCoord].IsAlive;
         }
 
+        // Set live cell to write grid
+        private void setCellAt(int xCoord, int yCoord, bool alive)
+        {
+            m_WriteCell[xCoord, yCoord].IsAlive = alive;
+        }
+
+        // Public method for clearing grids
         public void ClearAll()
         {
             initializeGrids();
@@ -131,19 +139,17 @@ namespace GOL.Classes
             drawNewGrid();
         }
 
+        // Responsible for redrawing the grid from memory
         private void drawNewGrid()
         {
-            lock (m_ReadCell)
+            m_Graphics.Clear(Color.White);
+            for (int i = 0; i < m_Rows; i++)
             {
-                m_Graphics.Clear(Color.White);
-                for (int i = 0; i < m_Rows; i++)
+                for (int j = 0; j < m_Cols; j++)
                 {
-                    for (int j = 0; j < m_Cols; j++)
+                    if ((i >= 0 && i < m_Rows) && (j >= 0 && j < m_Cols))
                     {
-                        if ((i >= 0 && i < m_Rows) && (j >= 0 && j < m_Cols))
-                        {
-                            drawCellAt(i, j);
-                        }
+                        drawCellAt(i, j);
                     }
                 }
             }
@@ -166,7 +172,6 @@ namespace GOL.Classes
             m_ReadCell = m_WriteCell;
             m_WriteCell = l_TempCell;
         }
-        // .......
 
         // Responsible for drawing dead or live cells.
         private void drawCellAt(int x, int y)
@@ -182,6 +187,7 @@ namespace GOL.Classes
                 m_Graphics.DrawRectangle(pen, rect);
         }
 
+        // Serialisation method, saves full object from memory
         public void GetObjectData(SerializationInfo info, StreamingContext ctx)
         {
             info.AddValue("m_WriteCell", m_WriteCell);
@@ -189,6 +195,7 @@ namespace GOL.Classes
             info.AddValue("m_Bitmap", m_Bitmap);
         }
 
+        // Empty both grids
         private void initializeGrids()
         {
             for (int i = 0; i < m_Rows; i++)
@@ -199,11 +206,6 @@ namespace GOL.Classes
                     m_WriteCell[i, j] = new Cell();
                 }
             }
-        }
-
-        private void setCellAt(int xCoord, int yCoord, bool alive)
-        {
-            m_WriteCell[xCoord, yCoord].IsAlive = alive;
         }
 
         void IDisposable.Dispose()
