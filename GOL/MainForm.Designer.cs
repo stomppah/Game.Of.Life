@@ -46,7 +46,7 @@
             // 
             this.canvas.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.canvas.Dock = System.Windows.Forms.DockStyle.Top;
-            this.canvas.Image = global::GOL.Properties.Resources.Empty;
+            this.canvas.Image = System.Drawing.Image.FromFile(@"C:\Dev\Personal\Game.Of.Life\GOL\Empty.bmp");
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(960, 540);

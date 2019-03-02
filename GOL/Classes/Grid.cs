@@ -16,7 +16,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 
-namespace GOL.Classes
+namespace GameOfLife.UI.Classes
 {
     [Serializable()]
     class Grid : IDisposable, ISerializable

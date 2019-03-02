@@ -17,8 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
-using GOL.Classes;
+using GameOfLife.UI.Classes;
 
 namespace GOL
 {

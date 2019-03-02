@@ -12,7 +12,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace GOL.Classes
+namespace GameOfLife.UI.Classes
 {
     [Serializable()]
     struct Cell : ISerializable
