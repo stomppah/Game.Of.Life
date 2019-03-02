@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GameOfLife.Library
 {
@@ -39,6 +40,35 @@ namespace GameOfLife.Library
                     nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
                 }
             }
+
+            CurrentState = nextState;
+            nextState = new CellState[gridHeight, gridWidth];
+        }
+
+        public void UpdateState2()
+        {
+            Parallel.For(0, gridHeight, i =>
+            {
+                Parallel.For(0, gridWidth, j => {
+                    var liveNeighbours = GetLiveNeighbours(i, j);
+                    nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
+                });
+            });
+
+            CurrentState = nextState;
+            nextState = new CellState[gridHeight, gridWidth];
+        }
+
+        public void UpdateState3()
+        {
+            Parallel.For(0, gridHeight, i =>
+            {
+                for (int j = 0; j < gridWidth; j++)
+                {
+                    var liveNeighbours = GetLiveNeighbours(i, j);
+                    nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
+                }
+            });
 
             CurrentState = nextState;
             nextState = new CellState[gridHeight, gridWidth];

@@ -1,4 +1,4 @@
-﻿using GameOfLife.Library;
+using GameOfLife.Library;
 using System;
 using System.Text;
 
@@ -8,14 +8,14 @@ namespace GameOfLife.ConsoleUI
     {
         static void Main(string[] args)
         {
-            var grid = new LifeGrid(25, 65);
+            var grid = new LifeGrid(54, 96);
             grid.Randomise();
 
             ShowGrid(grid.CurrentState);
 
             while (Console.ReadLine() != "q")
             {
-                grid.UpdateState();
+                grid.UpdateState3();
                 ShowGrid(grid.CurrentState);
             }
         }
