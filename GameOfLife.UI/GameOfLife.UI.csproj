@@ -15,5 +15,9 @@
     <Compile Remove="..\GOL\Properties\Resources.Designer.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameOfLife.Library\GameOfLife.Library.csproj" />
+  </ItemGroup>
+
   
 </Project>

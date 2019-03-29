@@ -5,32 +5,66 @@
  * Description: Provides human interation mechanisms.
  * URL: https://github.com/stomppah/Conways-Game-in-.NET
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using GameOfLife.UI.Classes;
 
 namespace GOL
 {
+    using GameOfLife.Library;
+    using System;
+    using System.Drawing;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
+    using System.Windows.Forms;
+
     public partial class MainForm : Form
     {
-        private static Grid m_Grid;
         private bool m_MouseDown = false;
+        private readonly LifeGrid grid;
 
         public MainForm()
         {
+            grid = new LifeGrid(54, 96);
+            grid.Randomise();
+            bitmap = new Bitmap(960, 540);
+            graphics = Graphics.FromImage(bitmap);
+
             InitializeComponent();
-            m_Grid = new Grid();
+
+            ShowGrid(grid.CurrentState);
         }
+
+        SolidBrush aliveCell = new SolidBrush(Color.Green);
+        SolidBrush deadCell = new SolidBrush(Color.Beige);
+        Pen alivePen = new Pen(Color.Green);
+        Pen deadPen = new Pen(Color.Beige);
+        //Rectangle rect =x;
+        void ShowGrid(CellState[,] currentState)
+        {
+            graphics.Clear(Color.White);
+            int x = 0;
+            int y = 0;
+            int rowLength = currentState.GetUpperBound(1) + 1;
+            int colHeight = currentState.GetUpperBound(0) + 1;
+            var output = new StringBuilder();
+
+            foreach (var state in currentState)
+            {
+                if (state == CellState.Alive)
+                    graphics.FillRectangle(aliveCell, new Rectangle(x * 10, y * 10, 10, 10));
+                else
+                    graphics.DrawRectangle(deadPen, new Rectangle(x * 10, y * 10, 10, 10)); 
+                x++;
+                if (x >= rowLength)
+                {
+                    x = 0;
+                    y++;        
+                }
+            }
+            Console.Write(output.ToString());
+        }
+
+        private Graphics graphics;
+        private Bitmap bitmap;
 
         private void Window_Load(object sender, EventArgs e)
         {
@@ -40,12 +74,14 @@ namespace GOL
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.DrawImage(m_Grid.Buffer, 0, 0);
+            //g.DrawImage(m_Grid.Buffer, 0, 0);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            m_Grid.generateNextGeneration();
+
+            grid.UpdateState3();
+            ShowGrid(grid.CurrentState);
             Refresh();
         }
 
@@ -57,13 +93,14 @@ namespace GOL
 
         private void stepBtn_Click(object sender, EventArgs e)
         {
-            m_Grid.generateNextGeneration();
+            grid.UpdateState3();
+            ShowGrid(grid.CurrentState);
             Refresh();
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            m_Grid.ClearAll();
+            //m_Grid.ClearAll();
             Refresh();
         }
 
@@ -83,7 +120,7 @@ namespace GOL
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Writing GOL Information");
-                bformatter.Serialize(stream, m_Grid);
+                //bformatter.Serialize(stream, m_Grid);
                 stream.Close();
             }
         }
@@ -101,14 +138,14 @@ namespace GOL
                 loadFile = openFileDialog1.FileName;
 
                 //Clear mp for further usage.
-                m_Grid = null;
+                //m_Grid = null;
 
                 //Open the file written above and read values from it.
                 Stream stream = File.Open(loadFile, FileMode.Open);
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Reading GOL Information");
-                m_Grid = (Grid)bformatter.Deserialize(stream);
+                //m_Grid = (Grid)bformatter.Deserialize(stream);
                 stream.Close();
                 Refresh();
             }
@@ -120,12 +157,12 @@ namespace GOL
             if (m_MouseDown)
             {
                 // bloody important
-                int i = (int)e.X / m_Grid.CellSize;
-                int j = (int)e.Y / m_Grid.CellSize;
-                if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
-                {
-                    m_Grid.paintCellAt(i, j, true);
-                }
+                //int i = (int)e.X / m_Grid.CellSize;
+                //int j = (int)e.Y / m_Grid.CellSize;
+                //if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
+                //{
+                //    m_Grid.paintCellAt(i, j, true);
+                //}
                 Refresh();
             }
         }
