@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOfLife.Library;
+using System;
 using System.Diagnostics;
 
 namespace GameOfLife.PerformanceTest
@@ -7,7 +8,7 @@ namespace GameOfLife.PerformanceTest
     {
         static void Main(string[] args)
         {
-            var grid = new GameOfLife.Library.LifeGrid(25, 70);
+            var grid = new GameOfLife.Library.LifeGrid(200, 200);
 
             var iterations = 10000;
 
@@ -15,6 +16,24 @@ namespace GameOfLife.PerformanceTest
 
             grid.Randomise();
             var stopWatch = Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+                grid.UpdateState4();
+            Console.WriteLine($"Nested for loop (Optimised): {stopWatch.ElapsedMilliseconds}");
+
+            grid.Randomise();
+            stopWatch = Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+                grid.UpdateState5();
+            Console.WriteLine($"Nested Parallel For loop (Optimised): {stopWatch.ElapsedMilliseconds}");
+
+            grid.Randomise();
+            stopWatch = Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+                grid.UpdateState6();
+            Console.WriteLine($"Single Level Parallel For loop (Optimised): {stopWatch.ElapsedMilliseconds}");
+
+            grid.Randomise();
+            stopWatch = Stopwatch.StartNew();
             for (int i = 0; i < iterations; i++)
                 grid.UpdateState();
             Console.WriteLine($"Nested for loop: {stopWatch.ElapsedMilliseconds}");
@@ -30,6 +49,7 @@ namespace GameOfLife.PerformanceTest
             for (int i = 0; i < iterations; i++)
                 grid.UpdateState3();
             Console.WriteLine($"Single Level Parallel For loop: {stopWatch.ElapsedMilliseconds}");
+
         }
     }
 }

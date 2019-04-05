@@ -18,65 +18,46 @@ namespace GOL
 
     public partial class MainForm : Form
     {
-        private bool m_MouseDown = false;
-        private readonly LifeGrid grid;
+        private const int BitmapWidth = 960;
+        private const int BitmapHeight = 540;
 
-        public MainForm()
+        private readonly int cellPixelSize;
+        private readonly LifeGrid lifeGrid;
+
+        private bool m_MouseDown = false;
+        private SolidBrush aliveCell = new SolidBrush(Color.Green);
+        private Pen deadPen = new Pen(Color.Beige);
+        private Graphics graphics;
+        private Bitmap bitmap;
+
+        public MainForm() : this(135, 240) { }
+
+        public MainForm(int rows, int columns)
         {
-            grid = new LifeGrid(135, 240, new Resident());
-            grid.Randomise();
-            bitmap = new Bitmap(960, 540);
-            graphics = Graphics.FromImage(bitmap);
+            this.cellPixelSize = (BitmapHeight / rows);
+            this.lifeGrid = new LifeGrid(rows, columns, new Resident());
+            this.lifeGrid.Randomise();
+            this.bitmap = new Bitmap(BitmapWidth, BitmapHeight);
+            this.graphics = Graphics.FromImage(bitmap);
 
             InitializeComponent();
 
-            ShowGrid(grid.CurrentGrid);
+            ShowGrid(this.lifeGrid.CurrentGrid);
         }
 
-        SolidBrush aliveCell = new SolidBrush(Color.Green);
-        SolidBrush deadCell = new SolidBrush(Color.Beige);
-        Pen alivePen = new Pen(Color.Green);
-        Pen deadPen = new Pen(Color.Beige);
-        //Rectangle rect =x;
-        void ShowGrid(CellState[,] currentState)
+        private void ShowGrid(ICell[,] currentGrid)
         {
-            graphics.Clear(Color.White);
-            int x = 0;
-            int y = 0;
-            int rowLength = currentState.GetUpperBound(1) + 1;
-            int colHeight = currentState.GetUpperBound(0) + 1;
-            var output = new StringBuilder();
-
-            foreach (var state in currentState)
-            {
-                if (state == CellState.Alive)
-                    graphics.FillRectangle(aliveCell, new Rectangle(x * 1, y * 1, 1, 1));
-                else
-                    graphics.DrawRectangle(deadPen, new Rectangle(x * 1, y * 1, 1, 1)); 
-                x++;
-                if (x >= rowLength)
-                {
-                    x = 0;
-                    y++;        
-                }
-            }
-        }
-
-        void ShowGrid(ICell[,] currentGrid)
-        {
-            graphics.Clear(Color.White);
+            this.graphics.Clear(Color.White);
             int x = 0;
             int y = 0;
             int rowLength = currentGrid.GetUpperBound(1) + 1;
-            int colHeight = currentGrid.GetUpperBound(0) + 1;
-            var output = new StringBuilder();
 
             foreach (Resident resident in currentGrid)
             {
                 if (resident.State == CellState.Alive)
-                    graphics.FillRectangle(aliveCell, new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
+                    graphics.FillRectangle(this.aliveCell, new Rectangle(x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize));
                 else
-                    graphics.DrawRectangle(deadPen, new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
+                    graphics.DrawRectangle(this.deadPen, new Rectangle(x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize));
                 x++;
                 if (x >= rowLength)
                 {
@@ -86,9 +67,6 @@ namespace GOL
             }
         }
 
-        private Graphics graphics;
-        private Bitmap bitmap;
-        private int pixelSize = 4;
 
         private void Window_Load(object sender, EventArgs e)
         {
@@ -101,24 +79,26 @@ namespace GOL
             g.DrawImage(bitmap, 0, 0);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
-            grid.UpdateState4();
-            ShowGrid(grid.CurrentGrid);
-            Refresh();
-        }
-
         private void startStopBtn_Click(object sender, EventArgs e)
         {
             timer1.Enabled = !timer1.Enabled ? true : false;
             startStopBtn.Text = !timer1.Enabled ? "Run" : "Stop";
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            PerformIteration();
+        }
+
         private void stepBtn_Click(object sender, EventArgs e)
         {
-            grid.UpdateState4();
-            ShowGrid(grid.CurrentGrid);
+            PerformIteration();
+        }
+
+        private void PerformIteration()
+        {
+            lifeGrid.UpdateState6();
+            ShowGrid(lifeGrid.CurrentGrid);
             Refresh();
         }
 
