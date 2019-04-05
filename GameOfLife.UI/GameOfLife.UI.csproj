@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="..\GOL\Classes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="..\GOL\Properties\Resources.Designer.cs" />
   </ItemGroup>
 

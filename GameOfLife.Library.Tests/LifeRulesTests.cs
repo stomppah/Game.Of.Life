@@ -11,9 +11,13 @@ namespace GameOfLife.Library.Tests
         [InlineData(1)]
         public void LiveCell_LessThanTwoLiveNeighbours_Dies(int liveNeighbours)
         {
-            CellState currentState = CellState.Alive;
+            var currentCell = new Resident()
+            {
+                State = CellState.Alive,
+                LiveNeighbors = liveNeighbours
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Dead, result);
         }
@@ -24,9 +28,13 @@ namespace GameOfLife.Library.Tests
         [InlineData(3)]
         public void LiveCell_TwoOrThreeLiveNeighbours_Lives(int liveNeighbours)
         {
-            CellState currentState = CellState.Alive;
+            var currentCell = new Resident()
+            {
+                State = CellState.Alive,
+                LiveNeighbors = liveNeighbours
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Alive, result);
         }
@@ -40,9 +48,13 @@ namespace GameOfLife.Library.Tests
         [InlineData(8)]
         public void LiveCell_MoreThanThreeLiveNeighbours_Dies(int liveNeighbours)
         {
-            CellState currentState = CellState.Alive;
+            var currentCell = new Resident()
+            {
+                State = CellState.Alive,
+                LiveNeighbors = liveNeighbours
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Dead, result);
         }
@@ -51,10 +63,13 @@ namespace GameOfLife.Library.Tests
         [Fact]
         public void DeadCell_ExactlyThreeLiveNeighbours_Lives()
         {
-            CellState currentState = CellState.Dead;
-            int liveNeighbours = 3;
+            var currentCell = new Resident()
+            {
+                State = CellState.Dead,
+                LiveNeighbors = 3
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Alive, result);
         }
@@ -65,9 +80,13 @@ namespace GameOfLife.Library.Tests
         [InlineData(2)]
         public void DeadCell_LessThanThreeLiveNeighbours_Dies(int liveNeighbours)
         {
-            CellState currentState = CellState.Dead;
+            var currentCell = new Resident()
+            {
+                State = CellState.Dead,
+                LiveNeighbors = liveNeighbours
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Dead, result);
         }
@@ -80,9 +99,13 @@ namespace GameOfLife.Library.Tests
         [InlineData(8)]
         public void DeadCell_MoreThanThreeLiveNeighbours_Dies(int liveNeighbours)
         {
-            CellState currentState = CellState.Dead;
+            var currentCell = new Resident()
+            {
+                State = CellState.Dead,
+                LiveNeighbors = liveNeighbours
+            };
 
-            CellState result = LifeRules.GetNewState(currentState, liveNeighbours);
+            CellState result = LifeRules.GetNewState(currentCell.State, currentCell.LiveNeighbors);
 
             Assert.Equal(CellState.Dead, result);
         }

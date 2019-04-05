@@ -23,14 +23,14 @@ namespace GOL
 
         public MainForm()
         {
-            grid = new LifeGrid(54, 96);
+            grid = new LifeGrid(135, 240, new Resident());
             grid.Randomise();
             bitmap = new Bitmap(960, 540);
             graphics = Graphics.FromImage(bitmap);
 
             InitializeComponent();
 
-            ShowGrid(grid.CurrentState);
+            ShowGrid(grid.CurrentGrid);
         }
 
         SolidBrush aliveCell = new SolidBrush(Color.Green);
@@ -50,9 +50,9 @@ namespace GOL
             foreach (var state in currentState)
             {
                 if (state == CellState.Alive)
-                    graphics.FillRectangle(aliveCell, new Rectangle(x * 10, y * 10, 10, 10));
+                    graphics.FillRectangle(aliveCell, new Rectangle(x * 1, y * 1, 1, 1));
                 else
-                    graphics.DrawRectangle(deadPen, new Rectangle(x * 10, y * 10, 10, 10)); 
+                    graphics.DrawRectangle(deadPen, new Rectangle(x * 1, y * 1, 1, 1)); 
                 x++;
                 if (x >= rowLength)
                 {
@@ -60,11 +60,35 @@ namespace GOL
                     y++;        
                 }
             }
-            Console.Write(output.ToString());
+        }
+
+        void ShowGrid(ICell[,] currentGrid)
+        {
+            graphics.Clear(Color.White);
+            int x = 0;
+            int y = 0;
+            int rowLength = currentGrid.GetUpperBound(1) + 1;
+            int colHeight = currentGrid.GetUpperBound(0) + 1;
+            var output = new StringBuilder();
+
+            foreach (Resident resident in currentGrid)
+            {
+                if (resident.State == CellState.Alive)
+                    graphics.FillRectangle(aliveCell, new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
+                else
+                    graphics.DrawRectangle(deadPen, new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
+                x++;
+                if (x >= rowLength)
+                {
+                    x = 0;
+                    y++;
+                }
+            }
         }
 
         private Graphics graphics;
         private Bitmap bitmap;
+        private int pixelSize = 4;
 
         private void Window_Load(object sender, EventArgs e)
         {
@@ -74,14 +98,14 @@ namespace GOL
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            //g.DrawImage(m_Grid.Buffer, 0, 0);
+            g.DrawImage(bitmap, 0, 0);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
 
-            grid.UpdateState3();
-            ShowGrid(grid.CurrentState);
+            grid.UpdateState4();
+            ShowGrid(grid.CurrentGrid);
             Refresh();
         }
 
@@ -93,8 +117,8 @@ namespace GOL
 
         private void stepBtn_Click(object sender, EventArgs e)
         {
-            grid.UpdateState3();
-            ShowGrid(grid.CurrentState);
+            grid.UpdateState4();
+            ShowGrid(grid.CurrentGrid);
             Refresh();
         }
 

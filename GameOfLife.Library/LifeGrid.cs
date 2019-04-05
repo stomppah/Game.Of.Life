@@ -5,29 +5,55 @@ using System.Threading.Tasks;
 
 namespace GameOfLife.Library
 {
-    public class LifeGrid
+    public class LifeGrid : ICell
     {
         int gridHeight;
         int gridWidth;
-
+        private readonly ICell prototype;
         public CellState[,] CurrentState;
         private CellState[,] nextState;
 
-        public LifeGrid(int height, int width)
+        public ICell[,] CurrentGrid;
+        private ICell[,] nextGrid;
+
+        public LifeGrid(int gridHeight, int gridWidth)
         {
-            gridHeight = height;
-            gridWidth = width;
+            this.gridHeight = gridHeight;
+            this.gridWidth = gridWidth;
 
             CurrentState = new CellState[gridHeight, gridWidth];
             nextState = new CellState[gridHeight, gridWidth];
 
-            for (int i = 0; i < gridHeight; i++)
+            for (int row = 0; row < gridHeight; row++)
             {
-                for (int j = 0; j < gridWidth; j++)
+                for (int col = 0; col < gridWidth; col++)
                 {
-                    CurrentState[i, j] = CellState.Dead;
+                    CurrentState[row, col] = CellState.Dead;
                 }
             }
+        }
+
+        public LifeGrid(int gridHeight, int gridWidth, ICell prototype)
+        {
+            this.gridHeight = gridHeight;
+            this.gridWidth = gridWidth;
+            this.prototype = prototype;
+
+            this.CurrentGrid = new ICell[gridHeight, gridWidth];
+            this.nextGrid = new ICell[gridHeight, gridWidth];
+            for (int row = 0; row < gridHeight; row++)
+            {
+                for (int col = 0; col < gridWidth; col++)
+                {
+                    CurrentGrid[row, col] = prototype.Create();
+                    nextGrid[row, col] = prototype.Create();
+                }
+            }
+        }
+
+        public ICell Create()
+        {
+            return new LifeGrid(gridHeight, gridWidth, CurrentGrid[0, 0]);
         }
 
         public void UpdateState()
@@ -74,6 +100,92 @@ namespace GameOfLife.Library
             nextState = new CellState[gridHeight, gridWidth];
         }
 
+        public void UpdateState4()
+        {
+            Parallel.For(0, gridHeight, row =>
+            {
+                for (int col = 0; col < gridWidth; col++)
+                {
+                    var resident = CurrentGrid[row, col] as Resident;
+                    if (resident.LiveNeighbors <= 0 && resident.State == CellState.Dead)
+                    {
+                        nextGrid[row, col] = resident;
+                    }
+                    else
+                    {
+                        (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
+                    }                    
+                }
+            });
+
+            Parallel.For(0, gridHeight, row =>
+            {
+                for (int col = 0; col < gridWidth; col++)
+                {
+                    if ((nextGrid[row, col] as Resident).State == CellState.Alive)
+                    {
+                        UpdateNeighbours(row, col);
+                    }
+                }
+            });
+
+            CurrentGrid = nextGrid;
+            nextGrid = new ICell[gridHeight, gridWidth];
+            for (int row = 0; row < gridHeight; row++)
+            {
+                for (int col = 0; col < gridWidth; col++)
+                {
+                    nextGrid[row, col] = prototype.Create();
+                }
+            }
+        }
+
+        private void UpdateNeighbours(int positionX, int positionY)
+        {
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+
+                    int neighbourX = positionX + i;
+                    int neighbourY = positionY + j;
+
+                    if (neighbourX >= 0 && neighbourX < gridHeight && neighbourY >= 0 && neighbourY < gridWidth)
+                    {
+                        (nextGrid[neighbourX, neighbourY] as Resident).LiveNeighbors = GetNextLiveNeighbours(neighbourX, neighbourY);
+                    }
+                }
+            }
+        }
+
+        private int GetNextLiveNeighbours(int positionX, int positionY)
+        {
+            int liveNeighbours = 0;
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+
+                    int neighbourX = positionX + i;
+                    int neighbourY = positionY + j;
+
+                    if (neighbourX >= 0 && neighbourX < gridHeight && neighbourY >= 0 && neighbourY < gridWidth)
+                    {
+                        if ((nextGrid[neighbourX, neighbourY] as Resident).State == CellState.Alive)
+                        {
+                            liveNeighbours++;
+                        }
+                    }
+                }
+            }
+
+            return liveNeighbours;
+        }
+
         private int GetLiveNeighbours(int positionX, int positionY)
         {
             int liveNeighbours = 0;
@@ -89,7 +201,7 @@ namespace GameOfLife.Library
 
                     if (neighbourX >= 0 && neighbourX < gridHeight && neighbourY >= 0 && neighbourY < gridWidth)
                     {
-                        if (CurrentState[neighbourX, neighbourY] == CellState.Alive)
+                        if ((CurrentGrid[neighbourX, neighbourY] as Resident).State == CellState.Alive)
                         {
                             liveNeighbours++;
                         }
@@ -105,15 +217,24 @@ namespace GameOfLife.Library
         {
             Random random = new Random();
 
-            for (int i = 0; i < gridHeight; i++)
+            for (int row = 0; row < gridHeight; row++)
             {
-                for (int j = 0; j < gridWidth; j++)
+                for (int col = 0; col < gridWidth; col++)
                 {
                     var next = random.Next(2);
                     var newState = next < 1 ? CellState.Dead : CellState.Alive;
-                    CurrentState[i, j] = newState;
+                    (CurrentGrid[row, col] as Resident).State = newState;
+                }
+            }
+
+            for (int row = 0; row < gridHeight; row++)
+            {
+                for (int col = 0; col < gridWidth; col++)
+                {
+                    (CurrentGrid[row, col] as Resident).LiveNeighbors = GetLiveNeighbours(row, col);
                 }
             }
         }
+
     }
 }
