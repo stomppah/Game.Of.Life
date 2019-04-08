@@ -25,7 +25,7 @@ namespace GOL
         private readonly LifeGrid lifeGrid;
 
         private bool m_MouseDown = false;
-        private SolidBrush aliveCell = new SolidBrush(Color.Green);
+        private SolidBrush aliveCell = new SolidBrush(Color.LawnGreen);
         private Pen deadPen = new Pen(Color.Beige);
         private Graphics graphics;
         private Bitmap bitmap;
@@ -47,7 +47,7 @@ namespace GOL
 
         private void ShowGrid(ICell[,] currentGrid)
         {
-            this.graphics.Clear(Color.White);
+            this.graphics.Clear(Color.Black);
             int x = 0;
             int y = 0;
             int rowLength = currentGrid.GetUpperBound(1) + 1;
@@ -55,9 +55,9 @@ namespace GOL
             foreach (Resident resident in currentGrid)
             {
                 if (resident.State == CellState.Alive)
-                    graphics.FillRectangle(this.aliveCell, new Rectangle(x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize));
-                else
-                    graphics.DrawRectangle(this.deadPen, new Rectangle(x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize));
+                    graphics.FillRectangle(this.aliveCell, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
+                //else
+                //    graphics.DrawRectangle(this.deadPen, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
                 x++;
                 if (x >= rowLength)
                 {
