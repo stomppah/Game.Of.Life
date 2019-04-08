@@ -31,7 +31,7 @@ namespace GameOfLife.Library
             this.CurrentGrid = new ICell[gridHeight, gridWidth];
             this.nextGrid = new ICell[gridHeight, gridWidth];
 
-            for (int row = 0; row < gridHeight; row++)
+            Parallel.For(0, gridHeight, row =>
             {
                 for (int col = 0; col < gridWidth; col++)
                 {
@@ -39,13 +39,15 @@ namespace GameOfLife.Library
                     CurrentGrid[row, col] = prototype.Create();
                     nextGrid[row, col] = prototype.Create();
                 }
-            }
+            });
         }
 
         public ICell Create()
         {
             return new LifeGrid(gridHeight, gridWidth, CurrentGrid[0, 0]);
         }
+
+        #region Legacy Update Methods
 
         public void UpdateState()
         {
@@ -169,6 +171,8 @@ namespace GameOfLife.Library
             });
         }
 
+        #endregion
+
         public void UpdateState6()
         {
             Parallel.For(0, gridHeight, row =>
@@ -286,24 +290,24 @@ namespace GameOfLife.Library
         {
             Random random = new Random();
 
-            for (int row = 0; row < gridHeight; row++)
+            Parallel.For(0, gridHeight, row =>
             {
                 for (int col = 0; col < gridWidth; col++)
                 {
-                    var next = random.Next(2);
-                    var newState = next < 1 ? CellState.Dead : CellState.Alive;
+                    var next = random.Next(6);
+                    var newState = next < 5 ? CellState.Dead : CellState.Alive;
                     CurrentState[row, col] = newState;
                     (CurrentGrid[row, col] as Resident).State = newState;
                 }
-            }
+            });
 
-            for (int row = 0; row < gridHeight; row++)
+            Parallel.For(0, gridHeight, row =>
             {
                 for (int col = 0; col < gridWidth; col++)
                 {
                     (CurrentGrid[row, col] as Resident).LiveNeighbors = GetLiveNeighbours(row, col);
                 }
-            }
+            });
         }
 
     }
