@@ -18,8 +18,8 @@ namespace GOL
 
     public partial class MainForm : Form
     {
-        private const int BitmapWidth = 960;
-        private const int BitmapHeight = 540;
+        private const int BitmapWidth = 1115;
+        private const int BitmapHeight = 700;
 
         private readonly int cellPixelSize;
         private readonly LifeGrid lifeGrid;
@@ -30,7 +30,7 @@ namespace GOL
         private Graphics graphics;
         private Bitmap bitmap;
 
-        public MainForm() : this(135, 240) { }
+        public MainForm() : this(700, 1115) { }
 
         public MainForm(int rows, int columns)
         {
