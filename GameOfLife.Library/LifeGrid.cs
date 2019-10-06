@@ -16,7 +16,7 @@ namespace GameOfLife.Library
         public ICell[,] CurrentGrid;
         private ICell[,] nextGrid;
 
-        public LifeGrid(int gridHeight, int gridWidth) : this(gridHeight, gridWidth, new Resident()) { }
+        public LifeGrid(int gridHeight, int gridWidth) : this(gridHeight, gridWidth, CellFactory.GetCell()) { }
 
         public LifeGrid(int gridHeight, int gridWidth, ICell prototype)
         {
@@ -49,131 +49,131 @@ namespace GameOfLife.Library
 
         #region Legacy Update Methods
 
-        public void UpdateState()
-        {
-            for (int i = 0; i < gridHeight; i++)
-            {
-                for (int j = 0; j < gridWidth; j++)
-                {
-                    var liveNeighbours = GetLiveNeighbours(i, j);
-                    nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
-                }
-            }
+        //public void UpdateState()
+        //{
+        //    for (int i = 0; i < gridHeight; i++)
+        //    {
+        //        for (int j = 0; j < gridWidth; j++)
+        //        {
+        //            var liveNeighbours = GetLiveNeighbours(i, j);
+        //            nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
+        //        }
+        //    }
 
-            CurrentState = nextState;
-            nextState = new CellState[gridHeight, gridWidth];
-        }
+        //    CurrentState = nextState;
+        //    nextState = new CellState[gridHeight, gridWidth];
+        //}
 
-        public void UpdateState2()
-        {
-            Parallel.For(0, gridHeight, i =>
-            {
-                Parallel.For(0, gridWidth, j => {
-                    var liveNeighbours = GetLiveNeighbours(i, j);
-                    nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
-                });
-            });
+        //public void UpdateState2()
+        //{
+        //    Parallel.For(0, gridHeight, i =>
+        //    {
+        //        Parallel.For(0, gridWidth, j => {
+        //            var liveNeighbours = GetLiveNeighbours(i, j);
+        //            nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
+        //        });
+        //    });
 
-            CurrentState = nextState;
-            nextState = new CellState[gridHeight, gridWidth];
-        }
+        //    CurrentState = nextState;
+        //    nextState = new CellState[gridHeight, gridWidth];
+        //}
 
-        public void UpdateState3()
-        {
-            Parallel.For(0, gridHeight, i =>
-            {
-                for (int j = 0; j < gridWidth; j++)
-                {
-                    var liveNeighbours = GetLiveNeighbours(i, j);
-                    nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
-                }
-            });
+        //public void UpdateState3()
+        //{
+        //    Parallel.For(0, gridHeight, i =>
+        //    {
+        //        for (int j = 0; j < gridWidth; j++)
+        //        {
+        //            var liveNeighbours = GetLiveNeighbours(i, j);
+        //            nextState[i, j] = LifeRules.GetNewState(CurrentState[i, j], liveNeighbours);
+        //        }
+        //    });
 
-            CurrentState = nextState;
-            nextState = new CellState[gridHeight, gridWidth];
-        }
+        //    CurrentState = nextState;
+        //    nextState = new CellState[gridHeight, gridWidth];
+        //}
 
-        public void UpdateState4()
-        {
-            for (int row = 0; row < gridHeight; row++)
-            {
-                for (int col = 0; col < gridWidth; col++)
-                {
-                    var resident = CurrentGrid[row, col] as Resident;
-                    if (resident.LiveNeighbors <= 0 && resident.State == CellState.Dead)
-                    {
-                        nextGrid[row, col] = resident;
-                    }
-                    else
-                    {
-                        (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
-                    }
-                }
-            }
+        //public void UpdateState4()
+        //{
+        //    for (int row = 0; row < gridHeight; row++)
+        //    {
+        //        for (int col = 0; col < gridWidth; col++)
+        //        {
+        //            var resident = CurrentGrid[row, col] as Resident;
+        //            if (resident.LiveNeighbors <= 0 && resident.State == CellState.Dead)
+        //            {
+        //                nextGrid[row, col] = resident;
+        //            }
+        //            else
+        //            {
+        //                (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
+        //            }
+        //        }
+        //    }
 
-            for (int row = 0; row < gridHeight; row++)
-            {
-                for (int col = 0; col < gridWidth; col++)
-                {
-                    if ((nextGrid[row, col] as Resident).State == CellState.Alive)
-                    {
-                        UpdateNeighbours(row, col);
-                    }
-                }
-            }
+        //    for (int row = 0; row < gridHeight; row++)
+        //    {
+        //        for (int col = 0; col < gridWidth; col++)
+        //        {
+        //            if ((nextGrid[row, col] as Resident).State == CellState.Alive)
+        //            {
+        //                UpdateNeighbours(row, col);
+        //            }
+        //        }
+        //    }
 
-            CurrentGrid = nextGrid;
-            nextGrid = new ICell[gridHeight, gridWidth];
-            for (int row = 0; row < gridHeight; row++)
-            {
-                for (int col = 0; col < gridWidth; col++)
-                {
-                    nextGrid[row, col] = prototype.Create();
-                }
-            }
-        }
-        public void UpdateState5()
-        {
-            Parallel.For(0, gridHeight, row =>
-            {
-                Parallel.For(0, gridWidth, col => {
-                    var resident = CurrentGrid[row, col] as Resident;
-                    if (resident.LiveNeighbors <= 0 && resident.State == CellState.Dead)
-                    {
-                        nextGrid[row, col] = resident;
-                    }
-                    else
-                    {
-                        (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
-                    }
-                });
-            });
+        //    CurrentGrid = nextGrid;
+        //    nextGrid = new ICell[gridHeight, gridWidth];
+        //    for (int row = 0; row < gridHeight; row++)
+        //    {
+        //        for (int col = 0; col < gridWidth; col++)
+        //        {
+        //            nextGrid[row, col] = prototype.Create();
+        //        }
+        //    }
+        //}
+        //public void UpdateState5()
+        //{
+        //    Parallel.For(0, gridHeight, row =>
+        //    {
+        //        Parallel.For(0, gridWidth, col => {
+        //            var resident = CurrentGrid[row, col] as Resident;
+        //            if (resident.LiveNeighbors <= 0 && resident.State == CellState.Dead)
+        //            {
+        //                nextGrid[row, col] = resident;
+        //            }
+        //            else
+        //            {
+        //                (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
+        //            }
+        //        });
+        //    });
 
-            Parallel.For(0, gridHeight, row =>
-            {
-                Parallel.For(0, gridWidth, col =>
-                {
-                    if ((nextGrid[row, col] as Resident).State == CellState.Alive)
-                    {
-                        UpdateNeighbours(row, col);
-                    }
-                });
-            });
+        //    Parallel.For(0, gridHeight, row =>
+        //    {
+        //        Parallel.For(0, gridWidth, col =>
+        //        {
+        //            if ((nextGrid[row, col] as Resident).State == CellState.Alive)
+        //            {
+        //                UpdateNeighbours(row, col);
+        //            }
+        //        });
+        //    });
 
-            CurrentGrid = nextGrid;
-            nextGrid = new ICell[gridHeight, gridWidth];
-            Parallel.For(0, gridHeight, row =>
-            {
-                Parallel.For(0, gridWidth, col =>
-                {
-                    nextGrid[row, col] = prototype.Create();
-                });
-            });
-        }
+        //    CurrentGrid = nextGrid;
+        //    nextGrid = new ICell[gridHeight, gridWidth];
+        //    Parallel.For(0, gridHeight, row =>
+        //    {
+        //        Parallel.For(0, gridWidth, col =>
+        //        {
+        //            nextGrid[row, col] = prototype.Create();
+        //        });
+        //    });
+        //}
 
         #endregion
 
-        public void UpdateState6()
+        public void UpdateState()
         {
             Parallel.For(0, gridHeight, row =>
             {

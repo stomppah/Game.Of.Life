@@ -29,7 +29,7 @@ namespace GameOfLife.PerformanceTest
             grid.Randomise();
             stopWatch = Stopwatch.StartNew();
             for (int i = 0; i < iterations; i++)
-                grid.UpdateState6();
+                grid.UpdateState();
             Console.WriteLine($"Single Level Parallel For loop (Optimised): {stopWatch.ElapsedMilliseconds}");
 
             grid.Randomise();

@@ -25,17 +25,16 @@ namespace GOL
         private readonly LifeGrid lifeGrid;
 
         private bool m_MouseDown = false;
-        private SolidBrush aliveCell = new SolidBrush(Color.LawnGreen);
-        private Pen deadPen = new Pen(Color.Beige);
+        private SolidBrush aliveCell = new SolidBrush(Color.Black);
         private Graphics graphics;
         private Bitmap bitmap;
 
-        public MainForm() : this(700, 1115) { }
+        public MainForm() : this(140, 223) { }
 
         public MainForm(int rows, int columns)
         {
             this.cellPixelSize = (BitmapHeight / rows);
-            this.lifeGrid = new LifeGrid(rows, columns, new Resident());
+            this.lifeGrid = new LifeGrid(rows, columns, CellFactory.GetCell()) ;
             this.lifeGrid.Randomise();
             this.bitmap = new Bitmap(BitmapWidth, BitmapHeight);
             this.graphics = Graphics.FromImage(bitmap);
@@ -47,7 +46,7 @@ namespace GOL
 
         private void ShowGrid(ICell[,] currentGrid)
         {
-            this.graphics.Clear(Color.Black);
+            this.graphics.Clear(Color.White);
             int x = 0;
             int y = 0;
             int rowLength = currentGrid.GetUpperBound(1) + 1;
@@ -55,8 +54,10 @@ namespace GOL
             foreach (Resident resident in currentGrid)
             {
                 if (resident.State == CellState.Alive)
+                {
                     graphics.FillRectangle(this.aliveCell, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
-                //else
+                    graphics.DrawRectangle(new Pen(Color.DarkGray), x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
+                }//else
                 //    graphics.DrawRectangle(this.deadPen, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
                 x++;
                 if (x >= rowLength)
@@ -97,7 +98,7 @@ namespace GOL
 
         private void PerformIteration()
         {
-            lifeGrid.UpdateState6();
+            lifeGrid.UpdateState();
             ShowGrid(lifeGrid.CurrentGrid);
             Refresh();
         }

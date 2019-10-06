@@ -13,6 +13,10 @@
 
   <ItemGroup>
     <Compile Remove="..\GOL\Classes\**" />
+    <Compile Remove="..\GOL\obj\Debug\**" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
 
   <ItemGroup>
