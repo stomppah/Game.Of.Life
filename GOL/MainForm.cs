@@ -9,6 +9,7 @@
 namespace GOL
 {
     using GameOfLife.Library;
+    using GameOfLife.Services;
     using System;
     using System.Drawing;
     using System.IO;
@@ -29,6 +30,8 @@ namespace GOL
         private Graphics graphics;
         private Bitmap bitmap;
 
+        private ConwaysClient client;
+
         public MainForm() : this(140, 223) { }
 
         public MainForm(int rows, int columns)
@@ -38,6 +41,7 @@ namespace GOL
             this.lifeGrid.Randomise();
             this.bitmap = new Bitmap(BitmapWidth, BitmapHeight);
             this.graphics = Graphics.FromImage(bitmap);
+            this.client = new ConwaysClient();
 
             InitializeComponent();
 
@@ -46,28 +50,8 @@ namespace GOL
 
         private void ShowGrid(ICell[,] currentGrid)
         {
-            this.graphics.Clear(Color.White);
-            int x = 0;
-            int y = 0;
-            int rowLength = currentGrid.GetUpperBound(1) + 1;
-
-            foreach (Resident resident in currentGrid)
-            {
-                if (resident.State == CellState.Alive)
-                {
-                    graphics.FillRectangle(this.aliveCell, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
-                    graphics.DrawRectangle(new Pen(Color.DarkGray), x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
-                }//else
-                //    graphics.DrawRectangle(this.deadPen, x * this.cellPixelSize, y * this.cellPixelSize, this.cellPixelSize, this.cellPixelSize);
-                x++;
-                if (x >= rowLength)
-                {
-                    x = 0;
-                    y++;
-                }
-            }
+            client.ShowGrid(currentGrid, this.cellPixelSize, this.aliveCell, ref this.graphics);
         }
-
 
         private void Window_Load(object sender, EventArgs e)
         {
@@ -183,4 +167,5 @@ namespace GOL
         }
     
     }
+
 }
