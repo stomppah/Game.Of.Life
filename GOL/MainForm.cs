@@ -23,34 +23,32 @@ namespace GOL
         private const int BitmapHeight = 700;
 
         private readonly int cellPixelSize;
-        private readonly LifeGrid lifeGrid;
 
         private bool m_MouseDown = false;
         private SolidBrush aliveCell = new SolidBrush(Color.Black);
         private Graphics graphics;
         private Bitmap bitmap;
 
-        private ConwaysClient client;
+        private ConwaysService client;
 
         public MainForm() : this(140, 223) { }
 
         public MainForm(int rows, int columns)
         {
             this.cellPixelSize = (BitmapHeight / rows);
-            this.lifeGrid = new LifeGrid(rows, columns, CellFactory.GetCell()) ;
-            this.lifeGrid.Randomise();
             this.bitmap = new Bitmap(BitmapWidth, BitmapHeight);
             this.graphics = Graphics.FromImage(bitmap);
-            this.client = new ConwaysClient();
+            this.client = new ConwaysService();
 
             InitializeComponent();
 
-            ShowGrid(this.lifeGrid.CurrentGrid);
+            ShowGrid();
         }
 
-        private void ShowGrid(ICell[,] currentGrid)
+        private void ShowGrid()
         {
-            client.ShowGrid(currentGrid, this.cellPixelSize, this.aliveCell, ref this.graphics);
+            client.ShowGrid(this.cellPixelSize, this.aliveCell, ref this.graphics);
+            Refresh();
         }
 
         private void Window_Load(object sender, EventArgs e)
@@ -82,9 +80,8 @@ namespace GOL
 
         private void PerformIteration()
         {
-            lifeGrid.UpdateState();
-            ShowGrid(lifeGrid.CurrentGrid);
-            Refresh();
+            client.UpdateState();
+            ShowGrid();
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
@@ -146,24 +143,26 @@ namespace GOL
             if (m_MouseDown)
             {
                 // bloody important
-                //int i = (int)e.X / m_Grid.CellSize;
-                //int j = (int)e.Y / m_Grid.CellSize;
-                //if ((i >= 0 && i < 192) && (j >= 0 && j < 106))
-                //{
-                //    m_Grid.paintCellAt(i, j, true);
-                //}
+                int i = (int)e.X / 3;
+                int j = (int)e.Y / 3;
+                if ((i >= 0 && i < 223) && (j >= 0 && j < 140))
+                {
+
+                }
                 Refresh();
             }
         }
 
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            m_MouseDown = true;
+            m_MouseDown = !m_MouseDown ? true : false;
+            timer1.Enabled = !m_MouseDown ? true : false;
         }
 
         private void canvas_MouseUp(object sender, MouseEventArgs e)
         {
-            m_MouseDown = false;
+            m_MouseDown = m_MouseDown ? false : true;
+            timer1.Enabled = m_MouseDown ? false :  true;
         }
     
     }
