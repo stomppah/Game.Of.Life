@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameOfLife.Blazor.Data
+namespace GameOfLife.BlazorUi.Data
 {
     public class WeatherForecastService
     {

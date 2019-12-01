@@ -1,12 +1,28 @@
 ﻿@page "/gol"
 
 @using GameOfLife.Services
+@using Blazor.Extensions.Canvas.Canvas2D
+@using Blazor.Extensions.Canvas
+@using Blazor.Extensions
 @inject ConwaysService ConwaysService
 
 <h1>Game Of Life</h1>
 
-<canvas id="canvas" width="1120" height="705"></canvas>
+<BECanvas Width="1120" Height="705" @ref="_canvasReference"></BECanvas>
 
 @code {
-    
+    private Blazor.Extensions.Canvas.Canvas2D.Canvas2DContext _context;
+
+    protected BECanvasComponent _canvasReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this._context = await this._canvasReference.CreateCanvas2DAsync();
+        await this._context.SetFillStyleAsync("green");
+
+        await this._context.FillRectAsync(10, 100, 100, 100);
+
+        await this._context.SetFontAsync("48px serif");
+        await this._context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
+    }
 }

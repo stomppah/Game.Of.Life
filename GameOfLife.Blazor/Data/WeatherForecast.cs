@@ -1,6 +1,6 @@
 using System;
 
-namespace GameOfLife.Blazor.Data
+namespace GameOfLife.BlazorUi.Data
 {
     public class WeatherForecast
     {
