@@ -46,10 +46,10 @@
             // 
             this.canvas.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.canvas.Dock = System.Windows.Forms.DockStyle.Top;
-            this.canvas.Image = System.Drawing.Image.FromFile(@"..\..\..\..\GOL\Empty.bmp");
             this.canvas.Location = new System.Drawing.Point(0, 0);
+            this.canvas.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(960, 540);
+            this.canvas.Size = new System.Drawing.Size(1120, 622);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
@@ -64,17 +64,19 @@
             // 
             // runningInfoStrip
             // 
-            this.runningInfoStrip.Location = new System.Drawing.Point(0, 618);
+            this.runningInfoStrip.Location = new System.Drawing.Point(0, 716);
             this.runningInfoStrip.Name = "runningInfoStrip";
-            this.runningInfoStrip.Size = new System.Drawing.Size(960, 22);
+            this.runningInfoStrip.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+            this.runningInfoStrip.Size = new System.Drawing.Size(1120, 22);
             this.runningInfoStrip.TabIndex = 1;
             this.runningInfoStrip.Text = "Generation: 0 | Live cells: 0 | Step time: 0 / 0 (0 / 0) ms";
             // 
             // startStopBtn
             // 
-            this.startStopBtn.Location = new System.Drawing.Point(12, 581);
+            this.startStopBtn.Location = new System.Drawing.Point(14, 670);
+            this.startStopBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.startStopBtn.Name = "startStopBtn";
-            this.startStopBtn.Size = new System.Drawing.Size(75, 23);
+            this.startStopBtn.Size = new System.Drawing.Size(88, 27);
             this.startStopBtn.TabIndex = 2;
             this.startStopBtn.Text = "Start";
             this.startStopBtn.UseVisualStyleBackColor = true;
@@ -82,9 +84,10 @@
             // 
             // stepBtn
             // 
-            this.stepBtn.Location = new System.Drawing.Point(93, 581);
+            this.stepBtn.Location = new System.Drawing.Point(108, 670);
+            this.stepBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.stepBtn.Name = "stepBtn";
-            this.stepBtn.Size = new System.Drawing.Size(75, 23);
+            this.stepBtn.Size = new System.Drawing.Size(88, 27);
             this.stepBtn.TabIndex = 3;
             this.stepBtn.Text = "Step";
             this.stepBtn.UseVisualStyleBackColor = true;
@@ -92,9 +95,10 @@
             // 
             // clearBtn
             // 
-            this.clearBtn.Location = new System.Drawing.Point(174, 581);
+            this.clearBtn.Location = new System.Drawing.Point(203, 670);
+            this.clearBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(75, 23);
+            this.clearBtn.Size = new System.Drawing.Size(88, 27);
             this.clearBtn.TabIndex = 4;
             this.clearBtn.Text = "Clear";
             this.clearBtn.UseVisualStyleBackColor = true;
@@ -102,9 +106,10 @@
             // 
             // loadBtn
             // 
-            this.loadBtn.Location = new System.Drawing.Point(873, 581);
+            this.loadBtn.Location = new System.Drawing.Point(1018, 670);
+            this.loadBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.loadBtn.Name = "loadBtn";
-            this.loadBtn.Size = new System.Drawing.Size(75, 23);
+            this.loadBtn.Size = new System.Drawing.Size(88, 27);
             this.loadBtn.TabIndex = 5;
             this.loadBtn.Text = "Load...";
             this.loadBtn.UseVisualStyleBackColor = true;
@@ -112,9 +117,10 @@
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(792, 581);
+            this.saveBtn.Location = new System.Drawing.Point(924, 670);
+            this.saveBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.saveBtn.Name = "saveBtn";
-            this.saveBtn.Size = new System.Drawing.Size(75, 23);
+            this.saveBtn.Size = new System.Drawing.Size(88, 27);
             this.saveBtn.TabIndex = 6;
             this.saveBtn.Text = "Save...";
             this.saveBtn.UseVisualStyleBackColor = true;
@@ -126,9 +132,9 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 640);
+            this.ClientSize = new System.Drawing.Size(1120, 738);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.loadBtn);
             this.Controls.Add(this.clearBtn);
@@ -137,6 +143,7 @@
             this.Controls.Add(this.runningInfoStrip);
             this.Controls.Add(this.canvas);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
