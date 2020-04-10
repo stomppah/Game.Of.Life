@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlazorSvgHelper\BlazorSvgHelper\BlazorSvgHelper.csproj" />
     <ProjectReference Include="..\GameOfLife.Services\GameOfLife.Services.csproj" />
   </ItemGroup>
 
