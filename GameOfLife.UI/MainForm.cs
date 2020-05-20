@@ -89,7 +89,8 @@ namespace GameOfLife.UI
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            //m_Grid.ClearAll();
+            this.lifeGrid = new LifeGrid(140, 223, CellFactory.GetCell());
+            ShowGrid(this.lifeGrid.CurrentGrid);
             Refresh();
         }
 
