@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameOfLife.Library
 {
-    public class LifeGrid : ICell
+    [Serializable()]
+    public class LifeGrid : ICell, ISerializable
     {
         int gridHeight;
         int gridWidth;
@@ -100,6 +102,15 @@ namespace GameOfLife.Library
             });
         }
 
+        public void AddAliveCell(int x, int y, int cellPixelSize)
+        {
+            int row = y / cellPixelSize;
+            int col = x / cellPixelSize;
+
+            (CurrentGrid[row, col] as Resident).State = CellState.Alive;
+            (CurrentGrid[row, col] as Resident).LiveNeighbors = GetLiveNeighbours(row, col);
+        }
+
         private void UpdateNeighbours(int positionX, int positionY)
         {
             for (int i = -1; i <= 1; i++)
@@ -172,7 +183,6 @@ namespace GameOfLife.Library
             return liveNeighbours;
         }
 
-
         public void Randomise()
         {
             Random random = new Random();
@@ -197,5 +207,29 @@ namespace GameOfLife.Library
             });
         }
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("gridHeight", gridHeight);
+            info.AddValue("gridWidth", gridWidth);
+            info.AddValue("CurrentGrid", CurrentGrid);
+            info.AddValue("nextGrid", nextGrid);
+        }
+
+        public LifeGrid(SerializationInfo info, StreamingContext ctxt)
+        {
+            this.gridHeight = info.GetInt32("gridHeight");
+            this.gridWidth = info.GetInt32("gridWidth");
+
+            CurrentState = new CellState[gridHeight, gridWidth];
+            nextState = new CellState[gridHeight, gridWidth];
+
+            this.prototype = CellFactory.GetCell();
+
+            this.CurrentGrid = new ICell[gridHeight, gridWidth];
+            this.nextGrid = new ICell[gridHeight, gridWidth];
+
+            this.CurrentGrid = (ICell[,])info.GetValue("CurrentGrid", typeof(ICell[,]));
+            this.nextGrid = (ICell[,])info.GetValue("nextGrid", typeof(ICell[,]));
+        }
     }
 }

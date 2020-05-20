@@ -23,7 +23,7 @@ namespace GameOfLife.UI
         private const int BitmapHeight = 700;
 
         private readonly int cellPixelSize;
-        private readonly LifeGrid lifeGrid;
+        private LifeGrid lifeGrid;
 
         private bool m_MouseDown = false;
         private SolidBrush aliveCell = new SolidBrush(Color.Black);
@@ -109,7 +109,7 @@ namespace GameOfLife.UI
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Writing GOL Information");
-                // bformatter.Serialize(stream, lifeGrid);
+                bformatter.Serialize(stream, lifeGrid);
                 stream.Close();
             }
         }
@@ -134,7 +134,8 @@ namespace GameOfLife.UI
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Reading GOL Information");
-                // lifeGrid = (LifeGrid)bformatter.Deserialize(stream);
+                this.lifeGrid = (LifeGrid)bformatter.Deserialize(stream);
+                ShowGrid(this.lifeGrid.CurrentGrid);
                 stream.Close();
                 Refresh();
             }

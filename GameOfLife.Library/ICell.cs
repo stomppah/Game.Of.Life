@@ -10,6 +10,7 @@ namespace GameOfLife.Library
         ICell Create();
     }
 
+    [Serializable()]
     public class Neighborhood : ICell
     {
         private readonly ICell[,] grid;
@@ -37,6 +38,7 @@ namespace GameOfLife.Library
         }
     }
 
+    [Serializable()]
     public class Resident : ICell
     {
         private static Color BORDER_COLOR = Color.DarkGoldenrod;
