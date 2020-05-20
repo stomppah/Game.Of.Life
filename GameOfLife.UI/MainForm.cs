@@ -6,7 +6,7 @@
  * URL: https://github.com/stomppah/Conways-Game-in-.NET
  */
 
-namespace GOL
+namespace GameOfLife.UI
 {
     using GameOfLife.Library;
     using GameOfLife.Services;
@@ -109,7 +109,7 @@ namespace GOL
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Writing GOL Information");
-                //bformatter.Serialize(stream, m_Grid);
+                // bformatter.Serialize(stream, lifeGrid);
                 stream.Close();
             }
         }
@@ -134,7 +134,7 @@ namespace GOL
                 BinaryFormatter bformatter = new BinaryFormatter();
 
                 Console.WriteLine("Reading GOL Information");
-                //m_Grid = (Grid)bformatter.Deserialize(stream);
+                // lifeGrid = (LifeGrid)bformatter.Deserialize(stream);
                 stream.Close();
                 Refresh();
             }
@@ -165,7 +165,7 @@ namespace GOL
         {
             m_MouseDown = false;
         }
-    
+
     }
 
 }

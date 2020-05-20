@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="..\GOL\MainForm.cs" />
+    <Compile Remove="..\GOL\Program.cs" />
     <Compile Remove="..\GOL\Properties\Resources.Designer.cs" />
   </ItemGroup>
 
