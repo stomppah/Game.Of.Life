@@ -49,6 +49,13 @@ namespace GameOfLife.Library
 
         public void UpdateState()
         {
+            UpdateCellState();
+            UpdateCellNeighbours();
+            UpdateGrids();
+        }
+
+        private void UpdateCellState()
+        {
             Parallel.For(0, gridHeight, row =>
             {
                 for (int col = 0; col < gridWidth; col++)
@@ -61,10 +68,13 @@ namespace GameOfLife.Library
                     else
                     {
                         (nextGrid[row, col] as Resident).State = LifeRules.GetNewState(resident.State, resident.LiveNeighbors);
-                    }                    
+                    }
                 }
             });
+        }
 
+        private void UpdateCellNeighbours()
+        {
             Parallel.For(0, gridHeight, row =>
             {
                 for (int col = 0; col < gridWidth; col++)
@@ -75,7 +85,10 @@ namespace GameOfLife.Library
                     }
                 }
             });
+        }
 
+        private void UpdateGrids()
+        {
             CurrentGrid = nextGrid;
             nextGrid = new ICell[gridHeight, gridWidth];
             Parallel.For(0, gridHeight, row =>
