@@ -15,7 +15,7 @@ namespace GameOfLife.ConsoleUI
 
             while (Console.ReadLine() != "q")
             {
-                grid.UpdateState3();
+                grid.UpdateState();
                 ShowGrid(grid.CurrentState);
             }
         }
